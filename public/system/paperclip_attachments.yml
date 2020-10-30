@@ -1,0 +1,7 @@
+---
+:Photo:
+  :image:
+  - :cover
+  - :medium
+  - :thumb
+  - :tile

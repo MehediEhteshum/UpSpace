@@ -1,0 +1,27 @@
+<table>
+
+  <tr>
+    <th style="padding-right: 10px;">ID</th>
+    <th style="padding-right: 10px;">Status</th>
+    <th style="padding-right: 10px;">Total</th>
+    <th style="padding-right: 10px;">Renter</th>
+    <th style="padding-right: 10px;">Space</th>
+    <th style="padding-right: 10px;">Start</th>
+    <th style="padding-right: 10px;">End</th>
+  </tr>
+
+  <% @upcoming_reservations.each do |upcoming_reservation| %>
+
+  <tr>
+    <td style="padding-right: 10px;"><%= upcoming_reservation.id %></td>
+    <td style="padding-right: 10px;"><%= upcoming_reservation.status %></td>
+    <td style="padding-right: 10px;">$<%= upcoming_reservation.total %></td>
+    <td style="padding-right: 10px;"><%= upcoming_reservation.user_id %></td>
+    <td style="padding-right: 10px;"><%= upcoming_reservation.space_id %></td>
+    <td style="padding-right: 10px;"><%= upcoming_reservation.start_date.in_time_zone(current_user.time_zone).strftime('%h %d, %G @ %H:%M') %></td>
+    <td style="padding-right: 10px;"><%= upcoming_reservation.end_date.in_time_zone(current_user.time_zone).strftime('%h %d, %G @ %H:%M') %></td>
+  </tr>
+
+  <% end %>
+
+</table>

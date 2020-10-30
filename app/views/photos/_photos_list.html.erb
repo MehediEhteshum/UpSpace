@@ -1,0 +1,23 @@
+<% if @photos.count > 0 %>
+  <div class="columns is-multiline sortable">
+    <%@photos.each do |photo| %>
+      <div id="photo_<%= photo.id %>" class="column is-one-third">
+        <div class="card">
+          <div class="card-image photo-list-preview">
+            <figure class="is-16by9">
+              <%= image_tag photo.image.url(:tile) %>
+            </figure>
+          </div>
+          <footer class="card-footer has-text-right">
+            <div class="card-footer-item is-shadowless">
+              <i class="fas fa-arrows-alt fa-2x ml-1 icon-green"></i>
+            </div>
+            <%= link_to space_photo_path(photo.space_id, photo), class: "card-footer-item is-shadowless", remote: true, method: :delete, data: {confirm: "Are you sure?"} do %>
+              <i class="fas fa-trash-alt fa-2x"></i>
+            <% end %>
+          </footer>
+        </div>
+      </div>
+    <% end %>
+  </div>
+<% end %>

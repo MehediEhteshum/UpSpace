@@ -1,0 +1,82 @@
+<div class="columns mt-5">
+  <div class="column is-full">
+    <div class="card is-shadowless panel-default">
+      <div class="column is-12">
+        <% if @admin_user %>
+          <%= link_to 'New Space Request', new_space_request_path, class: "button is-danger" %>
+        <% end %>            
+        <div class="has-text-centered"><h2 class="title is-2">Current Renter Requests</h2></div>
+        <br>
+        <div class="has-text-centered"><h4 class="title is-4">We’ve compiled a list of renters currently looking for space for meetings and events.</h4></div>
+        <div class="has-text-centered"><h4 class="title is-4">Do you have space? Contact our renters today. Earn money renting your space.</h4></div>
+        <br>
+        <table class="space-request-table">
+          <thead>
+            <tr>
+              <th>Potential Renter</th>
+              <th>Date(s) Space Needed</th>
+              <th>Time Space Needed</th>
+              <th colspan="2">Description of Event</th>
+              <th>City</th>
+              <th>Contact</th>
+              <% if @admin_user %>
+                <th colspan="2">Admin</th>
+              <% end %>
+            </tr>
+          </thead>
+          <tbody>
+            <% @space_requests.each_with_index do |space_request, index| %>
+              <tr>
+                <td><%= @users_requesting[index].fullname %></td>
+                <td><%= space_request.date_request %></td>
+                <td><%= space_request.time_request %></td>
+                <td colspan="2" class="space-request-description ellipsis-description" onclick="toggleEllipsis(this)"><%= space_request.description %></td>
+                <td><%= space_request.city %></td>
+                <td><%= link_to "Send #{@users_requesting[index].fullname} a message.", conversations_path(sender_id: current_user, recipient_id: @users_requesting[index].id), method: :post %></td>
+                <% if @admin_user %>
+                  <td colspan="2"><%= link_to 'Show', space_request %> / <%= link_to 'Edit', edit_space_request_path(space_request) %> / <%= link_to 'Destroy', space_request, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+                <% end %>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .space-request-table,
+  th,
+  td {
+    padding: 10px;
+    border: 1px solid black;
+    border-collapse: collapse;
+  }
+
+  .space-request-table {
+    width:100%;
+    table-layout: fixed
+  }
+
+  .space-request-table th {
+    background: #009875;
+    color: #ffffff;
+  }
+
+  .space-request-description {
+    cursor: pointer;
+  }
+
+  .ellipsis-description{
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+</style>
+
+<script>
+  function toggleEllipsis(el) {
+    $(el).toggleClass("ellipsis-description");
+  }
+</script>

@@ -1,0 +1,53 @@
+<div class="column is-full">
+  <div class="card is-shadowless">
+    <div class="card-header is-shadowless">
+      <div class="card-header-title">
+        <p class="title is-4">Your Conversations</p>
+      </div>
+    </div>
+    <div class="card-content">
+      <div class="has-text-centered">
+        <% if @conversations.count == 0 %>
+          <p>You have no conversations.</p>
+        <% end %>
+      </div>
+      <% @conversations.order(:updated_at).reverse_order.each do |conversation| %>
+        <% other = current_user  == conversation.sender ? conversation.recipient : conversation.sender %>
+        <% if conversation.messages.any? %>
+          <div class="columns is-full is-vcentered is-mobile">
+            <div class="column is-2 has-text-right">
+              <i class="fas fa-circle <% if unread(conversation) > 0 %>icon-danger<% else %>icon-white<% end %>"></i>
+              <%= link_to conversation_messages_path(conversation), class: "text-black" do %>
+                <%= conversation.messages.last.message_date %>
+              <% end %>
+            </div>
+            <div class="column is-1">
+              <figure class="image is-48x48 is-pulled-right">
+                <%= link_to user_path(other) do %>
+                  <%= image_tag avatar_url(other), class: "is-rounded" %>
+                <% end %>
+              </figure>
+            </div>
+            <div class="column is-3">
+              <%= link_to user_path(other), class: "text-black" do %>
+                <%= other.fullname %>
+              <% end %>
+            </div>
+            <div class="column is-5">
+              <%= link_to conversation_messages_path(conversation), class: "text-black" do %>
+                <%= conversation.messages.last.context.truncate(90) %>
+                <%= link_to "Read More", conversation_messages_path(conversation) if conversation.messages.last.context.length > 90 %>
+              <% end %>
+            </div>
+            <div class="column is-1">
+              <%= link_to "Reply", conversation_messages_path(conversation), class: "button is-danger" %>
+            </div>
+          </div>
+        <% end %>
+        <% if conversation != @conversations.order(:updated_at).reverse_order.last %>
+          <hr>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+</div>

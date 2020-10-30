@@ -1,0 +1,9 @@
+<div class="column is-half is-offset-one-quarter has-text-centered">
+  <% flash.each do |key, value| %>
+  <article class="message is-success">
+    <div class="message-body">
+      <%= value %>
+    </div>
+  </article>
+  <% end %>
+</div>

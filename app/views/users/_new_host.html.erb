@@ -1,0 +1,49 @@
+
+<section class="host-container column" style="display: none;">
+    <div class="columns is-multiline is-centered is-mobile">
+        <div class="column is-three-fifths-tablet is-full-mobile">
+            <h2 class="title is-2 has-text-centered">Welcome to up<span class="text-green">Space</span>,<br /><%= current_user.fullname %>!</h2>
+            <p class="has-text-centered">If you’re ready to list your space, you can do so now.<br /><br />
+                It will take 5 to 15 minutes.<br /><br />
+                At the end, you can choose to publish your space, or leave it unpublished if you need approval or more time.</p>
+        </div>
+        <div class="column is-three-fifths-tablet is-full-mobile">
+            <div class="center-content">
+                <a data-target="later-modal" class="modal-button text-black">I'll do this later</a>
+                <%= link_to "List My Space", new_space_path, class: "button is-danger ml-4" %>
+            </div>
+        </div>        
+    </div>
+</section>
+
+<div id="later-modal" class="modal animated faster">
+    <div class="modal-background"></div>
+    <div class="modal-card">
+        <section class="modal-card-body">
+            <div class="columns is-mobile is-centered">
+                <div class="column has-text-centered">
+                    <h3 class="title is-3">No problem!</h3> 
+                    <p>We will send you a reminder tomorrow.<br />In the meantime, take a look at the spaces already listed.</p>
+                    <%= link_to "Look at Spaces", search_path, class: "modal-button-close button is-danger mt-5" %>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+
+<script>
+    $(function(){
+        $('#later-modal .modal-background').on('click', function(evt){
+            evt.stopImmediatePropagation();
+            window.location.replace('<%= search_path %>');
+        });
+
+        $('[data-target="later-modal"]').on('click', function(){ 
+            $.ajax({
+                method: 'POST',
+                url: 'users/<%= current_user.id %>/reminder_email',
+                dataType: 'script'
+            });
+        });
+    });
+</script>

@@ -1,0 +1,50 @@
+<div class="column is-one-third">
+  <div class="columns is-multiline">
+    <div class="column is-full">
+      <div class="card">
+        <div class="card-content">
+          <div class="content">
+            <p class="title is-4">Summary</p>
+          </div>
+          <article class="media mb-0">
+            <div class="media-content">
+              <div class="column is-two-thirds is-offset-2 ">
+                <figure class="image is-4by3">
+                  <%= image_tag @space.cover_photo(:tile) %>
+                </figure>
+              </div>
+            </div>
+          </article>
+          <div class="has-text-centered mb-3">
+            <strong><%= @space.title %></strong>
+          </div>
+          <article class="media">
+            <div class="media-content">
+              Rate
+            </div>
+            <div class="media-right">
+              <strong>$<%= '%.2f' % @reservation.price %></strong>
+            </div>
+          </article>
+          <article class="media">
+            <div class="media-content">
+              <%= 'Hours' if @reservation.price_type == 'hourly' %>
+              <%= 'Days' if @reservation.price_type == 'daily' %>
+            </div>
+            <div class="media-right">
+              <strong><%= '%.2f' % @reservation.term %></strong>
+            </div>
+          </article>
+          <article class="media">
+            <div class="media-content">
+              Subtotal
+            </div>
+            <div class="media-right">
+              <strong>$<%= '%.2f' % @reservation.total %></strong>
+            </div>
+          </article>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

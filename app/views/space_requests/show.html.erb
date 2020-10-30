@@ -1,0 +1,29 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>User:</strong>
+  <%= @space_request.user_id %>
+</p>
+
+<p>
+  <strong>Date request:</strong>
+  <%= @space_request.date_request %>
+</p>
+
+<p>
+  <strong>Time request:</strong>
+  <%= @space_request.time_request %>
+</p>
+
+<p>
+  <strong>Description:</strong>
+  <%= @space_request.description %>
+</p>
+
+<p>
+  <strong>City:</strong>
+  <%= @space_request.city %>
+</p>
+
+<%= link_to 'Edit', edit_space_request_path(@space_request) %> |
+<%= link_to 'Back', space_requests_path %>

@@ -1,0 +1,17 @@
+<div class="card is-shadowless mt-5">
+  <div class="card-heading is-shadowless">
+    <div class="card-heading-title has-text-centered">
+      <p class="title is-4">Notifications</p>
+    </div>
+  </div>
+  <div class="card-content">
+    <div  id="notifications">
+      <%= render partial: "notification" %>
+      <% if @notifications.count == 0 %>
+        <div class="column is-full has-text-centered">
+          <p class="title is-4">You have no notifications</p>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

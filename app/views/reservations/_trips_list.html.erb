@@ -1,0 +1,38 @@
+<% @trips.each do |trip| %>
+  <div class="columns">
+    <div class="column is-2">
+      <p><%= trip.status %></p>
+      <%= trip.start_date.in_time_zone(current_user.time_zone).localtime.strftime('%v') %>
+      <p>Total: <%= number_to_currency(trip.total) %></p>
+    </div>
+    <div class="column is-2">
+      <%= link_to space_path(trip.space) do %>
+        <figure class="image">
+          <%= image_tag trip.space.cover_photo(:tile) %>
+        </figure>
+      <% end %>
+    </div>
+    <div class="column is-4">
+      <p><%= link_to trip.space.title, space_path(trip.space) %></p>
+      <%= link_to user_path(trip.space.user) do %>
+        <figure class="image is-24x24 is-inline-block">
+          <%= image_tag avatar_url(trip.space.user), class: "is-rounded" %>
+        </figure>
+      <% end %>
+      <%= link_to user_path(trip.space.user) do %>
+        <div class="is-inline-block">
+          <%= trip.space.user.fullname %>
+        </div>
+      <% end %>
+      <br>
+      <%= link_to "Send Message", conversations_path(sender_id: current_user.id, recipient_id: trip.space.user.id), method: :post, class: "button is-primary" %>
+    </div>
+    <div class="column is-3 has-text-centered">
+      <%= render partial: "reviews/guest_form", locals: {reservation: trip} if trip.Approved? && !trip.has_guest_review %>
+      <%= link_to "View Receipt", reservation_path(trip, format: :pdf), target: "_blank", class: "button is-light mt-1" if trip.Approved? %>
+      <%= link_to "Cancel", cancel_reservation_path(trip), method: :post, class: "button is-warning mt-1" if trip.Waiting? %>
+      <%= link_to "Complete Checkout", checkout_path(trip), class: "button is-danger mt-1" if trip.Checkout? %>
+    </div>
+  </div>
+  <hr>
+<% end %>

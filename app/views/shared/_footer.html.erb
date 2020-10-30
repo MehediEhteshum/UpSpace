@@ -1,0 +1,48 @@
+<% if !current_page?(search_path) %>
+<footer class="footer">
+  <div class="content has-text-centered">
+    <div class="columns is-centered">
+    <div class="column columns is-one-third" style="margin-bottom: 0 !important; padding-bottom: 0">
+      <div class="column is-half" style="padding-bottom: 0 !important;">
+        <div class="footer-nav">
+          <a href="mailto:hello@upspace.ca" target="_blank">hello@upspace.ca</a>
+        </div>
+      </div>
+      <div class="column is-half" style="padding-bottom: 0 !important;">
+        <div class="footer-nav">
+          <div class="footer-social">
+            <a href="https://www.instagram.com/upspace.ca" target="_blank" class="m-0"><i class="fab fa-instagram"></i></a>
+            <a href="https://www.facebook.com/upspace.ca/" target="_blank" class="x-5"><i class="fab fa-facebook-f"></i></a>
+            <a href="https://www.linkedin.com/company/upspace/" target="_blank" class="m-0"><i class="fab fa-linkedin-in"></i></a>
+          </div>
+        </div>
+      </div>
+    </div>
+    </div>
+    <div class="columns is-centered">
+      <div class="column columns is-one-third" style="padding-top: 0 !important;">  
+        <div class="column is-half" style="padding-bottom: 0 !important;">
+          <div class="footer-nav">
+            <a href="tel:‭1-403-971-9536‬">403.971.9536‬</a>
+          </div>
+        </div>
+      
+        <div class="column is-half" style="padding-bottom: 0 !important;">
+          <div class="footer-nav">
+            <%= link_to "Terms", terms_path %>
+            &nbsp;|&nbsp;
+            <%= link_to "Privacy", privacy_path %>
+          </div>
+          <div class="footer-nav">
+            <%= link_to "About Us", about_path %>
+          </div>
+        </div>
+      </div>
+    </div>
+      <div class="column is-full has-text-centered">
+        <p>Copyright &copy; up<%= link_to "Space", root_path %> <%= Date.today.year %></p>
+      </div>
+    </div>
+  </div>
+</footer>
+<% end %>

@@ -1,0 +1,15 @@
+<div class="columns y-20">
+  <div class="column is-4 is-offset-4 has-text-centered">
+    <p class="title is-4">Resend Confirmation</p>
+    <p>Enter your email address below.</p>
+    <%= form_for(resource, as: resource_name, url: confirmation_path(resource_name), html: { method: :post }) do |f| %>
+      <%= render 'shared/devisemes' %>
+      <div class="field">
+        <div class="control">
+          <%= f.email_field :email, autofocus: true, autocomplete: "email", placeholder: "Email", class: "input mt-5", value: (resource.pending_reconfirmation? ? resource.unconfirmed_email : resource.email) %>
+        </div>
+      </div>
+      <%= f.submit "Resend Confirmation Email", class: "button is-danger" %>
+    <% end %>
+  </div>
+</div>

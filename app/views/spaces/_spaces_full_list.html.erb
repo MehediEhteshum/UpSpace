@@ -1,0 +1,55 @@
+<% spaces.each do |space| %>
+  <div class="column is-full has-text-left">
+    <div class="card">
+      <% if space.featured? %>
+        <div class="featured"><span>Featured</span></div>
+      <% end %>
+      <% if space.tour_embed.present? %>
+        <div class="tour"><span>3D Tour</span></div>
+      <% end %>
+      <% if space.user_id == 231 %>
+        <div class="algonquin"><span>Algonquin</span></div>
+      <% end %>
+      <div class="card-image">
+        <figure class="image is-3by2">
+          <%= link_to space do %>
+            <%= image_tag space.cover_photo(:tile), alt: space.title.blank? ? "Venue" : space.title.truncate(150) %>
+          <% end %>
+        </figure>
+      </div>
+      <div class="card-content">
+        <div style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+          <% if space.active? %>
+            <%= link_to space.title, space %><br/>
+          <% else %>
+            <%= link_to space.title, listing_space_path(space) %><br/>
+          <% end %>
+        </div>
+        <div style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+          <% space.prices.each do |price| %>
+            <%= number_to_currency(price.price) + " " + price.price_type_id.capitalize if price.active %>
+            <br>
+          <% end %>
+        </div>
+        <div style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+          <%= space.listing_category %>
+        </div>
+        <div class="hidden">
+          <div id="star_<%= space.id %>"></div><%= pluralize(space.guest_reviews.count, "review") %>
+        </div>
+        <div class="has-text-centered">
+          <%= link_to "Book Space", space_path(space, anchor: "about"), class: "button is-danger mt-1" %>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    $('#star_<%= space.id %>').raty({
+      path: '/',
+      readOnly: true,
+      score: <%= space.average_rating %>
+    });
+  </script>
+
+<% end %>

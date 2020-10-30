@@ -1,0 +1,46 @@
+<div class="columns">
+  <div class="column is-one-quarter">
+    <div class="card is-shadowless">
+      <div class="card-content">
+        <ul class="sidebar-list">
+          <li class="sidebar-item"><%= link_to "Payment Method", payment_method_path, class: "sidebar-link" %></li>
+          <li class="sidebar-item"><%= link_to "Payout Method", payout_method_path, class: "sidebar-link " %></li>
+          <li class="sidebar-item active"><%= link_to "Notification Settings", notification_settings_path, class: "sidebar-link active" %></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="column is-three-quarters">
+    <div class="card is-shadowless">
+      <div class="card-header is-shadowless">
+        <div class="card-header-title">
+          Notification Settings
+        </div>
+      </div>
+      <div class="card-content">
+          <%= form_for :setting do |f| %>
+          <div class="columns">
+                <div class="column has-text-centered">
+                  <%= f.check_box :enable_email %> Email <i class="fas fa-question-circle type-tooltip icon-grey hidden" title="Receive email notifications for bookings and messages."></i>
+                </div>
+                <div class="column has-text-centered">
+                  <%= f.check_box :enable_sms %> Text Message <i class="fas fa-question-circle type-tooltip icon-grey hidden" title="Receive SMS notifications for bookings and messages."></i>
+                </div>
+              </div>
+              <div class="column has-text-centered">
+                <%= f.submit "Save Your Settings", class: "button is-primary" %>
+              </div>
+            </div>
+
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  $( function() {
+    $(".type-tooltip").tooltip();
+  } );
+</script>

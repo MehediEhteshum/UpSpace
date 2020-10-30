@@ -1,0 +1,353 @@
+<style>
+.has-about-img { background: url('/about/about.jpg')center center; background-size:cover; }
+
+.read-more-state {
+  display: none;
+}
+
+.read-more-target {
+  opacity: 0;
+  max-height: 0;
+  font-size: 0;
+  transition: .25s ease;
+}
+
+.read-more-state:checked ~ .read-more-wrap .read-more-target {
+  opacity: 1;
+  font-size: inherit;
+  max-height: 999em;
+}
+
+.read-more-state ~ .read-more-trigger:before {
+  content: 'Read more';
+}
+
+.read-more-state:checked ~ .read-more-trigger:before {
+  content: 'Read less';
+}
+
+.read-more-trigger {
+  cursor: pointer;
+  display: inline-block;
+  padding: 0 .5em;
+  color: #666;
+  font-size: .9em;
+  line-height: 2;
+  border: 1px solid #ddd;
+  border-radius: .25em;
+}
+
+</style>
+</div>
+<section class="hero is-medium has-about-img">
+  <div class="is-darkened">
+    <div class="hero-body has-text-centered">
+      <div class="container">
+      <!-- Hero Image Text -->        
+        <h2 class="subtitle is-3 mt-2 mb-10 text-white">Our Mission</h2>
+        <h1 class="title is-1 text-white">Making better use of commercial spaces</h1>
+      </div>
+    </div>
+  </div>
+</section>
+<div class="container has-text-centered"> <!-- Restart Application Layout Container -->
+
+<div class="columns">
+  <div class="column">
+    <div class="card is-shadowless">
+      <div class="card-content">
+        <div class="content">
+        <!-- Subtitle content -->
+        <h1 class="title is-3 mt-5">We make it easy to find and book space for your next meeting and event</h1>
+        <!-- byline -->
+            upSpace makes it easy to find unique spaces for your work and leisure events. We never want access to space to be a barrier to your event. 
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!--Left Content/ Right Image -->
+<!-- Renters Card -->
+<div class="columns">
+  <div class="column">
+    <div class="card is-shadowless">
+      <div class="card-content">
+        <div class="content">
+        <h1 class="title is-3 mt-5">Renters</h1>
+          <!-- Edit Renters tag line below -->
+          <span>
+          Save time. Everything you need in one place. Find the space you need using our extensive search filters. 
+          Check reviews. Chat with the Host about any questions related to your booking. Check availability. 
+          Submit a booking request. Pay online. It’s easy, convenient, and free. Renters only pay for the space they need. No subscription or usage fees.
+          </span>
+          <br>
+          <%= link_to "Find a Space", search_path, class: "button is-large x-10 y-2 mt-15" %>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="column">
+    <div class="card is-shadowless">
+      <div class="card-content">
+        <div class="content">
+          <%= image_tag "/about/renter.jpg", style: "height: 300px; width: auto; box-shadow: 20px 20px #009874; margin-left: 1.5em" %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--Right Content/ Left Image -->
+<!--Hosts card -->
+<div class="columns is-reversed-mobile">
+  <div class="column">
+    <div class="card is-shadowless">
+      <div class="card-content">
+        <div class="content">
+          <%= image_tag "/about/host.jpg", style: "height: 300px; width: auto; box-shadow: -20px 20px #ff2b56; margin-left: 1.5em" %>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="column">
+    <div class="card is-shadowless">
+      <div class="card-content">
+        <div class="content">        
+        <h1 class="title is-3 mt-5">Hosts</h1>
+        <!-- Edit Hosts tag line below -->
+          <span>
+          Start earning income today. List your space for free. You are in control of your rates and availability. Accept as little or as many bookings as you want. 
+          Only accept bookings that work for you. Check user reviews. Chat with Renters about any questions about the booking. 
+          Get payment directly to your account. No fuss bookings. No subscription fees. 
+          </span>
+          <br/>
+          <% if user_signed_in? %>
+          <% if current_user.spaces.any? %>
+            <%= link_to "List Your Space", new_space_path, class: "button is-large x-10 y-2 mt-15" %>
+          <% else %>
+            <%= link_to "List Your Space", become_a_host_path, class: "button is-large x-10 y-2 mt-15" %>
+          <% end %>
+        <% else %>
+          <%= link_to "List Your Space", become_a_host_path, class: "button is-large x-10 y-2 mt-15" %>
+        <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Team Section -->
+<h1 class="title is-3">About the Team</h1>
+<div class="columns is-centered mt-5 has-text-left is-multiline is-centered ">
+<!--Jenn-->
+  <div class="column is-one-third-tablet is-one-fifth-fullhd">
+    <div class="card is-shadowless">
+      <div class="card-image">
+        <figure class="image">
+        <%= image_tag "/about/jenn.jpg", style: "height: 200px; width: auto; box-shadow: 20px 20px #009874; margin-left: 1.5em" %>
+        </figure>
+      </div>
+      <div class="card-content">
+        <div>
+          <p class="title is-4">Jenn Schurer</p>
+          <p class="subtitle is-6">CEO</p>
+        </div>
+
+      </div>
+    </div>
+  </div>
+<!-- Nathan -->
+  <div class="column is-one-third-tablet is-one-fifth-fullhd">
+    <div class="card is-shadowless">
+      <div class="card-image">
+        <figure class="image">
+        <%= image_tag "/about/nathan.jpg", style: "height: 200px; width: auto; box-shadow: 20px 20px #009874; margin-left: 1.5em" %>
+        </figure>
+      </div>
+      <div class="card-content">
+        <div>
+          <p class="title is-4">Nathan Thibert</p>
+          <p class="subtitle is-6">Developer</p>
+        </div>
+
+      </div>
+    </div>
+  </div>
+<!-- xxx -->
+  <div class="column is-one-third-tablet is-one-fifth-fullhd">
+    <div class="card is-shadowless">
+      <div class="card-image">
+        <figure class="image">
+        <%= image_tag "/about/tim.jpg", style: "height: 200px; width: auto; box-shadow: 20px 20px #009874; margin-left: 1.5em" %>
+        </figure>
+      </div>
+      <div class="card-content">
+        <div>
+          <p class="title is-4">Tim Preston </p>
+          <p class="subtitle is-6">Developer</p>
+        </div>
+
+      </div>
+    </div>
+  </div>
+  <!-- Marketing PH 
+  <div class="column is-one-third-tablet is-one-fifth-fullhd">
+    <div class="card is-shadowless">
+      <div class="card-image">
+        <figure class="image">
+        <%= image_tag "/about/placeholder.png", style: "height: 200px; width: auto; box-shadow: 20px 20px #009874; margin-left: 1.5em" %>
+        </figure>
+      </div>
+      <div class="card-content">
+        <div>
+          <p class="title is-4">Name </p>
+          <p class="subtitle is-6">Marketing</p>
+        </div>
+        <div class="content mt-3">
+        Profile goes here
+        </div>
+      </div>
+    </div>
+  </div>
+  -->
+  <!-- Sales PH 
+  <div class="column is-one-third-tablet is-one-fifth-fullhd">
+    <div class="card is-shadowless">
+      <div class="card-image">
+        <figure class="image">
+        <%= image_tag "/about/cat.jpg", style: "height: 200px; width: auto; box-shadow: 20px 20px #009874; margin-left: 1.5em" %>
+        </figure>
+      </div>
+      <div class="card-content">
+        <div>
+          <p class="title is-4">Mr. Fluff</p>
+          <p class="subtitle is-6">Sales</p>
+        </div>
+
+      </div>
+    </div>
+  </div>
+  -->
+  </div>
+  <!--End of Team Layout-->
+<!-- Advisor Section -->
+<h1 class="title is-3">Advisors</h1>
+<div class="columns mt-5 has-text-left is-multiline is-centered">
+<!-- Charlene -->
+  <div class="column ">
+    <div class="card is-shadowless">
+      <div class="card-image">
+        <figure class="image">
+        <%= image_tag "/about/charlene.jpg", style: "height: 200px; width: auto; box-shadow: 20px 20px #009874; margin-left: 1.5em" %>
+        </figure>
+      </div>
+      <div class="card-content">
+        <div>
+          <p class="title is-4">Charlene Beckie</p>
+        </div>
+        <div class="content mt-3">
+        <input type="checkbox" class="read-more-state" id="advisor-content-2" />
+        <p class="read-more-wrap">
+        Ms. Charlene Beckie is a strong proponent of clean energy and the improvement of global health 
+        standards. Her approach is goal-driven and she has a solid understanding of achievement and 
+        comprehensive business strategies. She has post-secondary education <span class="read-more-target">degrees in Psychology, Business, 
+        Geophysics and Geomatics Engineering with a robust understanding of Business and Marketing. 
+        She has gained significant international experience through personal and work travels.  Ms. Beckie 
+        supports the education and entrepreneurship of female and under-represented groups through her 
+        mentorship roles and executive positon on the Canadian Federation of University Women – Calgary 
+        chapter.
+        </span></p>
+        <label for="advisor-content-2" class="read-more-trigger"></label>
+        </div>
+      </div>
+    </div>
+  </div>
+<!-- Julia -->
+  <div class="column ">
+    <div class="card is-shadowless">
+      <div class="card-image">
+        <figure class="image">
+        <%= image_tag "/about/julia.jpg", style: "height: 200px; width: auto; box-shadow: 20px 20px #009874; margin-left: 1.5em" %>
+        </figure>
+      </div>
+      <div class="card-content">
+        <div>
+          <p class="title is-4">Julia Elvidge </p>
+        </div>
+        <div class="content mt-3">
+        <input type="checkbox" class="read-more-state" id="advisor-content-3" />
+        <p class="read-more-wrap">
+        Julia Elvidge is an advisor, board member and investor to high technology companies.
+        Educated as an engineer, Julia designed microchip circuits before she moving into the
+        business side of technology. As President and co-founder, Julia helped build Chipworks
+        into an <span class="read-more-target">industry leader delivering patent and technology analysis services and later SaaS
+        products to electronics firms worldwide. In June 2016, Chipworks was sold to
+        Techinsight. After the completion of the integration process, Julia was able semi-retire in
+        early 2017.
+        </span></p>
+        <label for="advisor-content-3" class="read-more-trigger"></label>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Rahul -->
+  <div class="column ">
+    <div class="card is-shadowless">
+      <div class="card-image">
+        <figure class="image">
+        <%= image_tag "/about/rahul.jpg", style: "height: 200px; width: auto; box-shadow: 20px 20px #009874; margin-left: 1.5em" %>
+        </figure>
+      </div>
+      <div class="card-content">
+        <div>
+          <p class="title is-4">Rahul Kulkami</p>
+        </div>
+        <div class="content mt-3">
+        <input type="checkbox" class="read-more-state" id="advisor-content-4" />
+        <p class="read-more-wrap">
+        Rahul is a Sr. Product Manager on Shopify’s research and development team. An
+        engineer and co-founder of a SaaS analytics company, with prior experience at Microsoft
+        & SAP, Rahul has led his team at Shopify to power the technology behind the world’s
+        most influential online-to-offline<span class="read-more-target"> brands including Kylie Cosmetics, Alo Yoga, and AllBirds.
+        Rahul deeply believes UpSpace is at the centre of an important convergence in digital &
+        offline experiences. He continues to advise UpSpace in product development and
+        strategy leveraging his 10+ years of experience in the Tech industry.
+        </span></p>
+        <label for="advisor-content-4" class="read-more-trigger"></label>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!--Kurt-->
+  <div class="column ">
+    <div class="card is-shadowless">
+      <div class="card-image">
+        <figure class="image">
+        <%= image_tag "/about/kurt.jpg", style: "height: 200px; width: auto; box-shadow: 20px 20px #009874; margin-left: 1.5em" %>
+        </figure>
+      </div>
+      <div class="card-content">
+        <div>
+          <p class="title is-4">Kurt Schurer</p>
+        </div>
+        <div class="content mt-3">
+        <input type="checkbox" class="read-more-state" id="advisor-content-1" />
+        <p class="read-more-wrap">
+        Kurt Schurer, CPA is an M&A advisor based in Calgary focused on the sale of successful mid-
+        market companies.  Having served clients while working with local, national and international 
+        firms his focus is exceeding client’s expectations by collaborating with international sector 
+        experts.<span class="read-more-target"> He has closed a number of mid-market deals in various industries, including oil and gas 
+        services, manufacturing, pipeline construction, pipeline inspection and HVAC.  In spare time I 
+        enjoy travelling with my better half, fishing, chess and serving the community through Rotary.
+        I am excited to be included as an advisor to Upspace as I see the company serving a niche, 
+        providing a community service, and being good for the environment by increasing utilization of 
+        existing assets.  Oh, and I get enormous satisfaction to be a part of Jennifer’s success. I am 
+        hopeful my knowledge on marketing and scale up will benefit Upspace.
+        </span></p>
+        <label for="advisor-content-1" class="read-more-trigger"></label>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+  <!--End of Advisor Section-->
+</div>

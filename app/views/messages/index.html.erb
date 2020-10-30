@@ -1,0 +1,61 @@
+<div class="columns">
+  <div class="column is-one-third">
+    <div class="card is-shadowless has-text-centered ">
+      <div class="card-content">
+        <div class="media">
+          <div class="media-left">
+            <%= link_to @other do %>
+              <figure class="image is-48x48">
+                <%= image_tag avatar_url(@other), class: "is-rounded" %>
+              </figure>
+            <% end %>
+          </div>
+          <div class="media-content">
+            <p class="title is-4"><%= link_to @other.fullname, @other, class: "text-default" %></p>
+            <p class="subtitle is-6"><%= link_to "View Profile", @other %></p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+    <hr>
+    <% if @spaces.any? %>
+      <div class="column is-full has-text-centered">
+        <p class="subtitle is-5"><%= @other.fullname %>'s Spaces</p>
+        <%= render partial: "spaces/spaces_full_list", locals: {spaces: @spaces} %>
+        <% if @allSpaces.length > 3 %>
+          <%= link_to 'View All Spaces', search_path(q: {user_id_eq: @other}), class: "button is-primary" %>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+
+  <div class="column is-two-thirds">
+    <div class="card is-shadowless">
+      <div class="card-header is-shadowless">
+        <p class="title is-4">Conversation with <%= @other.fullname %></p>
+        <input id="conversation_id" type="hidden" value="<%= @conversation.id %>">
+      </div>
+      <div class="card-content has-text-centered">
+        <%= form_for [@conversation, @conversation.messages.new], remote: true do |f| %>
+          <div class="field">
+            <div class="control">
+              <%= f.text_area :context, rows: 3, class: "textarea is-medium", label: false, placeholder: "Type your message here" %>
+              <%= f.hidden_field :user_id, value: current_user.id %>
+            </div>
+          </div>
+          <div class="field">
+            <div class="control has-text-centered">
+              <%= f.submit "Send Message", class: "button is-danger" %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+
+    <div id="chat">
+      <%= render @messages %>
+    </div>
+
+  </div>
+</div>

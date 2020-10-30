@@ -1,0 +1,195 @@
+<section class="section">
+  <div class="container">
+    <%= form_with model: [@space, @space.reservations.new] do |f| %>
+      <%= hidden_field_tag 'price_type', @pricing.price_type %>
+      <div class="columns">
+        <div class="column is-two-thirds">
+          <div class="columns is-multiline">
+            <div class="column is-fullwidth">
+              <div class="card">
+                <div class="card-content">
+                  <div class="content">
+                    <p class="title is-4">Payment Options</p>
+                  </div>
+                  <div class="content">
+                    <p class="title is-5">Use a Recent Card</p>
+                  </div>
+                  <div class="content">
+                    <% @stripe_customer.sources.first(3).each do |card| %>
+                      <div class="control">
+                        <%= radio_button_tag 'payment', card.id, checked: true %>
+                        <span class="ml-5">
+                          <%= card.brand %><%= ": **** **** **** " + card.last4 %>
+                        </span>
+                        <span class="ml-3">
+                          <%= "Exp: " + card.exp_month.to_s + "/" + card.exp_year.to_s.last(2) %>
+                        </span>
+                      </div>
+                    <% end %>
+                  </div>
+                  <div class="content">
+                    <p class="title is-5">Use a New Credit Card</p>
+                  </div>
+                  <div class="content">
+                    <%= form_tag("/add_payment", method: "post", id: "payment-form") do %>
+                      <div class="field form-row y-5">
+                        <div class="control">
+                          <div id="card-element">
+                            <!-- A Stripe Element will be inserted here. -->
+                          </div>
+                        </div>
+                        <!-- Used to display form errors. -->
+                        <div id="card-errors" role="alert" class="text-red"></div>
+                      </div>
+                      <button type="submit" class="button is-danger modal-button" data-target="modalreview" data-toggle="modalpayment">Continue</button>
+                    <% end %>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="column is-one-third">
+          <div class="columns is-multiline">
+            <div class="column is-full">
+              <div class="card">
+                <div class="card-content">
+                  <div class="content">
+                    <p class="title is-4">Summary</p>
+                  </div>
+                  <article class="media">
+                    <div class="media-content">
+                      <figure class="image is-4by3">
+                        <%= image_tag @space.cover_photo(:tile) %>
+                      </figure>
+                    </div>
+                    <div class="media-right">
+                      <strong><%= @space.title %></strong>
+                    </div>
+                  </article>
+                  <article class="media">
+                    <div class="media-content">
+                      Rate
+                    </div>
+                    <div class="media-right">
+                      <strong><%= '%.2f' % @pricing.price %></strong>
+                    </div>
+                  </article>
+                  <article class="media">
+                    <div class="media-content">
+                      <%= 'Hours' if @pricing.price_type == 'hourly' %>
+                      <%= 'Days' if @pricing.price_type == 'daily' %>
+                    </div>
+                    <div class="media-right">
+                      <strong>
+                        <%= @reservation.term %>
+                      </strong>
+                    </div>
+                  </article>
+                  <article class="media">
+                    <div class="media-content">
+                      Total
+                    </div>
+                    <div class="media-right">
+                      <strong><%= '%.2f' % @reservation.total %></strong>
+                    </div>
+                  </article>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</section>
+
+<script src="https://js.stripe.com/v3/"></script>
+
+<script>
+  // Create a Stripe client.
+  var stripe = Stripe('<%= @stripe_key %>');
+
+  // Create an instance of Elements.
+  var elements = stripe.elements();
+
+  // Custom styling can be passed to options when creating an Element.
+  // (Note that this demo uses a wider set of styles than the guide below.)
+  var style = {
+    base: {
+      color: '#32325d',
+      fontFamily: '"Nunito", "Helvetica Neue", Helvetica, sans-serif',
+      fontSmoothing: 'antialiased',
+      fontSize: '16px',
+      '::placeholder': {
+        color: '#aab7c4'
+      }
+    },
+    invalid: {
+      color: '#fa755a',
+      iconColor: '#fa755a'
+    }
+  };
+
+  // Create an instance of the card Element.
+  var card = elements.create('card', {
+    hidePostalCode: true,
+    style: style
+  });
+
+  // Add an instance of the card Element into the `card-element` <div>.
+  card.mount('#card-element');
+
+  // Handle real-time validation errors from the card Element.
+  card.addEventListener('change', function(event) {
+    var displayError = document.getElementById('card-errors');
+    if (event.error) {
+      displayError.textContent = event.error.message;
+    } else {
+      displayError.textContent = '';
+    }
+  });
+
+  // Handle form submission.
+  var form = document.getElementById('payment-form');
+  form.addEventListener('submit', function(event) {
+    event.preventDefault();
+
+    stripe.createToken(card).then(function(result) {
+      if (result.error) {
+        // Inform the user if there was an error.
+        var paymentModal = document.getElementById('modalpayment');
+        var reviewModal = document.getElementById('modalreview');
+        var errorElement = document.getElementById('card-errors');
+        errorElement.textContent = result.error.message;
+        setTimeout(function () {
+            paymentModal.classList.add('is-active','fadeIn');
+            paymentModal.classList.remove('fadeOut');
+            reviewModal.classList.add('fadeOut');
+            reviewModal.classList.remove('is-active','fadeIn');
+        } , 300);
+      } else {
+        // Send the token to your server.
+        stripeTokenHandler(result.token);
+      }
+    });
+  });
+
+  // Submit the form with the token ID.
+  function stripeTokenHandler(token) {
+    // Insert the token ID into the form so it gets submitted to the server
+    var form = document.getElementById('payment-form');
+    var hiddenInput = document.createElement('input');
+    hiddenInput.setAttribute('type', 'hidden');
+    hiddenInput.setAttribute('name', 'stripeToken');
+    hiddenInput.setAttribute('value', token.id);
+    form.appendChild(hiddenInput);
+
+    // Submit the form
+    form.submit();
+    // $('#modalreview').addClass('is-active');
+    // $('#modalpayment').removeClass('is-active');
+    // e.preventDefault();
+  }
+</script>

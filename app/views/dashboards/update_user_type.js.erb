@@ -1,0 +1,9 @@
+$('.select-container').hide();
+
+document.documentElement.scrollTo(0, 0);
+
+<% if current_user.user_type == "Lister" %>
+  $('.host-container').fadeIn();
+<% else %>
+  $('.renter-container').fadeIn();
+<% end %>

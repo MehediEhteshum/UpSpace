@@ -1,0 +1,21 @@
+Hi <%= @recipient.fullname %>,
+<br/><br/>
+Your request for "<%= @space.title %>" is declined.
+<br/><br/>
+Reason: Credit Card Response -- Declined
+<br/><br/>
+<h3>How you can resolve this:</h3>
+1. <%= link_to "Update", payment_method_url %> your payment settings.
+<br/>
+2. Message <%= link_to @host.fullname, user_url(@host) %> (the Lister) to confirm your booking.
+<br/><br/>
+If the problem persists, please contact your credit card issuer.
+<br><br>
+<img src="https://upspace.ca/email/logo-email.jpg" alt="upSpace" />
+<br>
+515 Legget Drive, Suite 800, Ottawa, ON K2K 3G4
+<br>
+Check us out on
+<a href="https://www.facebook.com/upspace.ca/" target="_blank">Facebook</a>,
+<a href="https://www.instagram.com/upspace.ca" target="_blank">Instagram</a>, and
+<a href="https://www.linkedin.com/company/upspace/" target="_blank">LinkedIn</a>

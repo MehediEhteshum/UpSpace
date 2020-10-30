@@ -1,0 +1,91 @@
+<div class="columns mt-5">
+  <div class="column is-one-quarter has-text-centered">
+    <figure class="image">
+      <%= image_tag avatar_url(@user, 'medium'), class: "avatar-full" %>
+    </figure>
+    <p class="title is-4 mt-5"><%= @user.fullname %></p>
+    <% if current_user && current_user != @user %>
+      <%= link_to "Send Message", conversations_path(sender_id: current_user.id, recipient_id: @user.id), method: :post, class: "button is-danger" %>
+    <% end %>
+    <% if !current_user && current_user != @user %>
+      <%= link_to 'Send Message', 'javascript:;', class: "button is-danger login_btn" %>
+    <% end %>
+    <br/>
+    <div class="card is-shadowless">
+      <div class="card-content has-text-left">
+        </p>
+        <% if @user.confirmation_token %>
+          <p>Email Address Verified
+            <% if current_user && current_user.confirmed_at.nil? %>
+              <span class="is-pulled-right icon-red">
+                <i class="fas fa-times"></i>
+              </span>
+            <% else %>
+              <span class="is-pulled-right icon-green">
+                <i class="fas fa-check-circle"></i>
+              </span>
+            <% end %>
+          </p>
+        <% end %>
+        <% if @user.provider %>
+          <p>Facebook<span class="is-pulled-right icon-green"><i class="fas fa-check-circle"></i></span></p>
+        <% end %>
+        <% if @user.phone_verified? %>
+          <p>Phone Number<span class="is-pulled-right icon-green"><i class="fas fa-check-circle"></i></span></p>
+        <% end %>
+      </div>
+    </div>
+    <% if current_user && current_user.try(:admin?) %>
+      <div class="has-text-centered">
+        <% if @user.referral_code.nil? %>
+          <hr><%= link_to 'Generate Referral Code', assign_referral_user_path, method: :post, class: "button is-light" %><hr>
+        <% end %>
+        <%= link_to "Login As User", masquerade_path(@user), class: "button is-primary" %>
+      </div>
+    <% end %>
+  </div>
+
+  <div class="column is-three-quarters">
+
+    <div class="card is-shadowless">
+      <div class="card-header is-shadowless">
+        <div class="card-header-title">
+          <p class="title is-4">Listings (<%= @spaces.length %>)</p>
+        </div>
+      </div>
+      <div class="card-content">
+        <div class="columns is-multiline">
+          <%= render partial: "spaces/spaces_list", locals: {spaces: @spaces} %>
+        </div>
+      </div>
+    </div>
+
+    <div class="card is-shadowless">
+      <div class="card-header is-shadowless">
+        <div class="card-header-title">
+          <p class="title is-4">Reviews From Guests (<%= @guest_reviews.count %>)</p>
+        </div>
+      </div>
+      <div class="card-content">
+        <%= render "reviews/guest_list"  %>
+      </div>
+    </div>
+
+    <div class="card is-shadowless">
+      <div class="card-header is-shadowless">
+        <div class="card-header-title">
+          <p class="title is-4">Reviews From Hosts (<%= @host_reviews.count %>)</p>
+        </div>
+      </div>
+      <div class="card-content">
+        <%= render "reviews/host_list" %>
+      </div>
+    </div>
+
+  </div>
+</div>
+<script>
+  $("body").on("click", ".login_btn", function(){
+    $("#modaldeviselogin").css("display", "flex");
+  })
+</script>

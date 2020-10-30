@@ -1,0 +1,102 @@
+<div class="columns">
+  <div class="column is-one-quarter">
+    <%= render 'space_menu' %>
+  </div>
+  <div class="column is-three-quarters">
+    <div class="card is-shadowless">
+      <div class="card-content">
+        <%= form_for @space do |f| %>
+
+          <div class="columns is-multiline">
+            <div class="column is-two-thirds">
+              <div class="field">
+                <label>Listing Title</label>
+                <div class="control">
+                  <%= f.text_field :title, placeholder: "Give your space a catchy title", class: "input is-medium", required: true%>
+                </div>
+              </div>
+            </div>
+            <div class="column is-one-third">
+              <div class="field">
+                <label>Square Footage</label>
+                <div class="control">
+                  <%= f.number_field :sqft, placeholder: "Optional", class: "input is-medium", required: false%>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="column is-full">
+            <p class="subtitle is-4">Amenities</p>
+            <div class="columns is-multiline">
+              <div class="column is-half">
+                <%= f.check_box :is_wifi %>
+                WiFi
+              </div>
+              <div class="column is-half">
+                <%= f.check_box :is_audio %>
+                Audio Equipment Available
+              </div>
+              <div class="column is-half">
+                <%= f.check_box :is_food %>
+                Food Available for Purchase
+              </div>
+              <div class="column is-half">
+                <%= f.check_box :is_video %>
+                Visual Equipment Available
+              </div>
+              <div class="column is-half">
+                <%= f.check_box :is_alcohol %>
+                Alcohol Available for Purchase
+              </div>
+              <div class="column is-half">
+                <%= f.check_box :is_accessible %>
+                Wheelchair Accessible
+              </div>
+              <div class="column is-half">
+                <%= f.check_box :is_byob %>
+                Alcohol Permitted on Premises
+              </div>
+              <div class="column is-half">
+                <%= f.check_box :is_ground %>
+                Ground Level
+              </div>
+              <div class="column is-half">
+                <%= f.check_box :is_catering %>
+                Catering Permitted
+              </div>
+              <div class="column is-half">
+                <%= f.check_box :is_natural %>
+                Natural Light
+              </div>
+              <div class="column is-half">
+                <%= f.check_box :is_kitchen %>
+                Kitchenette Available
+              </div>
+            </div>
+          </div>
+
+          <div class="field">
+            <div class="control">
+              <label class="subtitle is-4">Description</label>
+              <%= f.text_area :description, rows: 5, placeholder: "Describe your space. Give details about the amenities. What makes your space unique and desirable?", class: "textarea is-medium input", required: true %>
+            </div>
+          </div>
+
+          <div class="field">
+            <div class="control">
+              <label class="subtitle is-4">Availability</label>
+              <%= f.text_area :availability_text, rows: 5, placeholder: "Let users know when the space is generally available. For example: \rMonday: 3pm to 6pm\rFriday: 7am to 10pm\rSaturday: 10:30am to 1:30pm (except on long weekends)\rSunday: closed", class:
+              "textarea is-medium input", required: true %>
+            </div>
+          </div>
+
+          <div class="has-text-centered">
+            <%= f.submit "Save", class: "button is-medium is-primary" %>
+          </div>
+
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

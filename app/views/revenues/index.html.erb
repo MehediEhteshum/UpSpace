@@ -1,0 +1,18 @@
+<div class="columns mt-5">
+  <div class="column is-full">
+    <div class="card is-shadowless panel-default">
+      <div class="card-header is-shadowless">
+        <div class="card-header-title">
+          <p class="title is-3">This Week's Revenue</p>
+        </div></div>
+      <div class="card-content has-text-centered">
+          <% if @reservations.blank? %>
+            <h3 class="title is-3">You don't have any reservations</h3><br/>
+            <%= link_to "List a Space to earn income", new_space_path, class: "button is-danger" %>
+          <% else %>
+            <%= column_chart @this_week_revenue, colors: ["#009874"] %>
+          <% end %>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,45 @@
+<section class="renter-container column" style="display: none;">
+    <div class="columns is-multiline is-centered is-mobile">
+        <div class="column is-three-fifths-tablet is-full-mobile">
+            <h2 class="title is-2 has-text-centered">Welcome to up<span class="text-green">Space</span>, <br /><%= current_user.fullname %>!</h2>
+            <div class="columns is-mobile is-centered">
+                <div class="column is-two-thirds-desktop is-full-touch">
+                    <%= form_with(url: renter_info_user_path(current_user), method: "post") do %>
+                        <%= label_tag(:info, "Tell us what you are looking for:", class: "label") %>
+                        <%= text_area_tag(:info, nil, rows:5, class: "textarea has-fixed-size", placeholder: 'Describe the type of space you need, how big, what it will be used for.') %>
+                        <div class="center-content mt-5">
+                            <%= link_to "Skip", search_path, class: "text-black" %>
+                            <%= submit_tag("Submit", class: 'button is-danger ml-4') %>
+                        </div>
+                    <% end %>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="info-modal" class="modal animated faster">
+        <div class="modal-background"></div>
+        <div class="modal-card">
+            <section class="modal-card-body">
+                <div class="columns is-mobile is-centered">
+                    <div class="column has-text-centered">
+                        <h3 class="title is-3">Thank you!</h3>
+                        <p>Our team will get back to you soon with our recommendations.<br /> In the meantime, feel free to look at some spaces.</p>
+                        <%= link_to "Search for Spaces", search_path, class: "modal-button-close button is-danger mt-5" %>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+    
+    <script>
+        $(function(){
+            $('#info-modal .modal-background').on('click', function(evt){
+                evt.stopImmediatePropagation();
+                window.location.replace('<%= search_path %>');
+            });
+    
+        });
+    </script>
+
+</section>

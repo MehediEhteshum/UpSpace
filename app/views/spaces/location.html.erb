@@ -1,0 +1,37 @@
+<div class="columns">
+  <div class="column is-one-quarter">
+    <%= render 'space_menu' %>
+  </div>
+  <div class="column is-three-quarters">
+    <div class="card is-shadowless">
+      <div class="card-content">
+        <%= form_for @space do |f| %>
+          <div class="field">
+            <div class="control">
+              <p>Address (excluding unit number)</p>
+              <%= f.text_field :address, placeholder: "What is your address?", class: "input is-medium", required: true, id: "autolocationListing" %>
+            </div>
+          </div>
+          <% if !@space.address.blank? && (@space.longitude.blank? || @space.latitude.blank?) %>
+            <article class="message is-danger">
+              <div class="message-body">
+                Please use the autocomplete suggestions for the address above. Otherwise, your listing will not display properly.
+              </div>
+            </article>
+          <% end %>
+          <div class="has-text-centered">
+            <%= f.submit "Save", class: "button is-medium is-primary" %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=<%= ENV['GOOGLE_MAPS_API_KEY'] %>&libraries=places&region=CA"></script>
+
+<script>
+  $(function() {
+    $("#autolocationListing").geocomplete();
+  })
+</script>

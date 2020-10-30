@@ -1,0 +1,7 @@
+<ul class="sidebar-link">
+  <li class="<%= current_page?(admin_path) ? 'sidebar-item active' : 'sidebar-item' %>"><%= link_to "Home", admin_path, class: "sidebar-link" %></li>
+  <li class="<%= current_page?(admin_users_path) ? 'sidebar-item active' : 'sidebar-item' %>"><%= link_to "Users", admin_users_path, class: "sidebar-link" %></li>
+  <li class="<%= current_page?(admin_spaces_path) ? 'sidebar-item active' : 'sidebar-item' %>"><%= link_to "Spaces", admin_spaces_path, class: "sidebar-link" %></li>
+  <li class="<%= current_page?(admin_reservations_path) ? 'sidebar-item active' : 'sidebar-item' %>"><%= link_to "Reservations", admin_reservations_path, class: "sidebar-link" %></li>
+  <li class="<%= current_page?(admin_email_path) ? 'sidebar-item active' : 'sidebar-item' %>"><%= link_to "Email", admin_email_path, class: "sidebar-link" %></li>
+</ul>

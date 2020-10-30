@@ -1,0 +1,30 @@
+<%= form_with(url: user_avatars_path(@user), multipart: true)  do |f| %>
+    <div class="columns is-multiline">
+        <div class="column is-full center-content">
+            <figure class="image avatar-max">
+                <%= image_tag avatar_url(@user, 'medium'), class: "avatar-full" %>
+            </figure>
+        </div>
+        <div class="column center-content">
+            <span id="avatar_upload" class="button is-danger btn-file">
+                <i class="fas fa-cloud-upload-alt"></i>&nbsp; Upload Photo
+                <%= f.file_field :avatar %>
+            </span>
+            <div id="avatar_status" class="hidden">
+                <i class="fa fa-spinner fa-spin"></i>&nbsp; Uploading...
+            </div>
+        </div>
+    </div>
+    
+<% end %>
+
+<script>
+    $(function(){
+        $('#avatar').change(function(evt){
+            $("#avatar_status").removeClass("hidden");
+            $("#avatar_upload").addClass("hidden");
+            this.form.submit();
+        });
+    });
+
+</script>

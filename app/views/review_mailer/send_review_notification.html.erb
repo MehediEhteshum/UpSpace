@@ -1,0 +1,4 @@
+<%= @review.type == 'GuestReview' ? @guest.fullname : @host.fullname %> just left a <%= @review.star %> star review of <%= @review.type == 'GuestReview' ? @host.fullname : @guest.fullname %>:
+<br/><br/>
+<em><%= simple_format(@review.comment) %></em>
+<br/><br/>

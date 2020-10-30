@@ -1,0 +1,233 @@
+<div class="columns">
+
+  <div class="column is-one-fifth has-text-centered">
+    <%= link_to edit_user_registration_path do %>
+      <figure class="image">
+        <%= image_tag avatar_url(current_user, 'medium'), class: "avatar-full" %>
+      </figure>
+      <p class="title is-4 mt-5"><%= current_user.fullname %></p>
+    <% end %>
+      <div class="card is-shadowless">
+        <div class="card-content has-text-left">
+         
+          <% if !current_user.image.nil? %>
+            <p>Use <%= link_to "Gravatar", "https://gravatar.com/", target: "_blank" %> to update your Profile Photo.</p>
+          <% end %>
+
+          <% if current_user.confirmation_token %>
+            <p>Email Address Verified
+              <% if current_user.confirmed_at.nil? %>
+                <span class="is-pulled-right icon-red">
+                  <i class="fas fa-times"></i>
+                </span>
+              <% else %>
+                <span class="is-pulled-right icon-green">
+                  <i class="fas fa-check-circle"></i>
+                </span>
+              <% end %>
+            </p>
+          <% end %>
+          <% if current_user.provider %>
+            <p>Facebook Verified<span class="is-pulled-right icon-green"><i class="fas fa-check-circle"></i></span></p>
+          <% end %>
+          <% if current_user.phone_verified %>
+            <p>Phone Number Verified<span class="is-pulled-right icon-green"><i class="fas fa-check-circle"></i></span></p>
+          <% end %>
+      </div>
+    </div>
+
+  </div>
+
+
+  <div class="column is-four-fifths">
+
+    <% if (current_user.user_type == "Lister" && !@spaces.any?) ||
+    (current_user.user_type == "Renter" && !@trips.any?) ||
+    (current_user.user_type == "ListerRenter" && (!@spaces.any? || !@trips.any? )) %>
+      <!-- Next Action -->
+      <div class="card is-shadowless">
+        <div class="card-header is-shadowless">
+          <div class="card-header-title">
+            <p class="title is-4">Setup</p>
+          </div>
+        </div>
+        <div class="card-content">
+          <div class="steps">
+            <div class="step-item is-completed is-success">
+              <div class="step-marker">
+                <span class="icon">
+                  <i class="fa fa-check"></i>
+                </span>
+              </div>
+              <div class="step-details">
+                <p class="step-title">Step 1</p>
+                <p>Confirm <%= current_user.provider == "facebook" ? "Facebook Account" : "Email Address" %></p>
+              </div>
+            </div>
+            <% if current_user.user_type == "Lister" || current_user.user_type == "ListerRenter" %>
+              <div class="step-item <%= current_user.merchant_id.blank? ? 'is-active' : 'is-completed is-success' %>">
+                <div class="step-marker"></div>
+                <div class="step-details">
+                  <p class="step-title">Step 2</p>
+                  <% if current_user.merchant_id.blank? %>
+                    <p><%= link_to "Setup", payout_method_path, class: "button is-danger" %></p>
+                  <% else %>
+                    <p>Connect Payout Account</p>
+                  <% end %>
+                </div>
+              </div>
+              <div class="step-item">
+                <div class="step-marker <%= 'is-active' if !current_user.merchant_id.blank? %>"></div>
+                <div class="step-details">
+                  <p class="step-title">Step 3</p>
+                  <% if current_user.merchant_id.blank? %>
+                    <p><%= link_to "Create Listing", new_space_path %></p>
+                  <% else %>
+                    <p><%= link_to "Create Listing", new_space_path, class: "button is-danger" %></p>
+                  <% end %>
+                </div>
+              </div>
+            <% elsif current_user.user_type == "Renter" %>
+              <div class="step-item is-active ">
+                <div class="step-marker"></div>
+                <div class="step-details">
+                  <p class="step-title">Step 2</p>
+                  <p><%= link_to "Book Space", search_path, class: "button is-danger" %></p>
+                </div>
+              </div>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    <% end %>
+
+    <!-- Notification Panel -->
+    <% if current_user.unread > 0 %>
+      <div class="card is-shadowless">
+        <div class="card-header is-shadowless">
+          <div class="card-header-title">
+            <p class="title is-4">Notifications</p>
+          </div>
+        </div>
+        <div class="card-content">
+          <%= link_to notifications_path do %>
+            You have <span id="num_of_unread"><%= pluralize(current_user.unread, "Notification") %></span>.
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+
+    <!-- Referral Code -->
+    <% if !current_user.referral_code.nil? %>
+      <div class="card is-shadowless">
+        <div class="card-header is-shadowless">
+          <div class="card-header-title">
+            <p class="title is-4">Referral Code</p>
+          </div>
+        </div>
+        <div class="card-content has-text-centered">
+          <p>Share with your network and receive credit for helping build the upSpace community.</p>
+          <div class="field has-addons has-addons-centered">
+            <p class="control">
+              <input type="text" value="<%= root_url(ref: current_user.referral_code) %>" id="referral-code" class="input mt-3" readonly="true">
+            </p>
+            <p class="control">
+              <button class="button is-primary mt-3" onclick="copyToClipboard()">Copy</button>
+            </p>
+          </div>
+        </div>
+      </div>
+    <% end %>
+
+    <!-- Reservations -->
+    <% if @trips.any? %>
+      <div class="card is-shadowless">
+        <div class="card-header is-shadowless">
+          <div class="card-header-title">
+            <p class="title is-4">Recent Reservations</p>
+          </div>
+        </div>
+        <div class="card-content">
+          <% if current_user.reservations.any? %>
+            <%= render partial: "reservations/trips_list", locals: {spaces: @trips} %>
+          <% else %>
+            <div class="has-text-centered">You haven't made a reservation yet.<br/><br/><%= link_to "Browse Spaces", search_path, class: "button is-primary" %><br/>to get started.</div>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+
+    <!-- Favourites -->
+    <% if @favourites.any? %>
+      <div class="card is-shadowless">
+        <div class="card-header is-shadowless">
+          <div class="card-header-title">
+            <p class="title is-4">Favourite Spaces</p>
+          </div>
+        </div>
+        <div class="card-content has-text-centered">
+          <div class="columns">
+            <%= render partial: "spaces/spaces_list", locals: {spaces: @favourite_spaces} %>
+          </div>
+          <p><%= link_to "See More", favourites_path %></p>
+        </div>
+      </div>
+    <% end %>
+
+    <!-- Listings -->
+    <% if @spaces.any? %>
+      <div class="card is-shadowless">
+        <div class="card-header is-shadowless">
+          <div class="card-header-title">
+            <p class="title is-4">View and Edit Listings</p>
+          </div>
+        </div>
+        <div class="card-content">
+          <div class="columns is-multiline">
+            <%= render partial: "spaces/spaces_list", locals: {spaces: @spaces} %>
+          </div>
+        </div>
+      </div>
+    <% end %>
+
+  </div>
+
+
+</div>
+
+<% if current_user.user_type.blank? %>
+  <div class="modal is-active animated faster fadeIn">
+    <div class="modal-background"></div>
+    <div class="modal-card">
+      <section class="modal-card-body has-text-centered">
+        <p class="title is-3">What do you want to do?</p>
+        <div class="column is-half is-offset-one-quarter has-text-centered">
+          <p class="mb-5 is-centered"><%= link_to "Find space to book", '/dashboard/1', class: "button is-fullwidth is-primary is-medium" %></p>
+          <p class="mb-5"><%= link_to "List space to rent", '/dashboard/0', class: "button is-fullwidth is-primary is-medium" %></p>
+          <p><%= link_to "Both", '/dashboard/2', class: "button is-fullwidth is-primary is-medium"  %></p>
+        </div>
+      </section>
+    </div>
+    <button class="modal-close is-large" aria-label="close"></button>
+  </div>
+<% end %>
+
+<script>
+  function copyToClipboard() {
+    var copyText = document.getElementById("referral-code");
+    copyText.select();
+    copyText.setSelectionRange(0, 99999);
+    document.execCommand("copy");
+    new Noty ({
+      type: 'success',
+      layout: 'topCenter',
+      animation: {
+        open: 'animated bounceInDown',
+        close: 'animated bounceOutUp'
+      },
+      timeout: 1500,
+      theme: 'sunset',
+      text: 'Copied referral link to clipboard'
+    }).show();
+  }
+</script>

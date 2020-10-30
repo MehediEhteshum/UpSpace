@@ -1,0 +1,8 @@
+<span class="subtitle" style="margin-bottom: auto; margin-top: auto;">
+  <% if user_signed_in? && current_user.likes?(@space) %>
+    <%= link_to '<i class="fas fa-heart" style="color: #ff2b56; margin-top: auto; margin-bottom: auto;"></i>'.html_safe, space_favourite_path(@space), method: :delete, remote: true, class: "" %>
+  <% else %>
+    <%= link_to '<i class="far fa-heart" style="color: #ff2b56; margin-top: auto; margin-bottom: auto;"></i>'.html_safe, space_favourite_path(@space), method: :post, remote: true, class: "" %>
+  <% end %>
+  <% @space.favourites.count %>
+</span>

@@ -1,0 +1,168 @@
+<div class="card">
+  <div class="card-content">
+    <% if !@spaces.blank? %>
+      <div class="columns">
+        <%= search_form_for @search, class: 'form-group', remote: true, url: host_calendar_path do |f| %>
+          <div class="column is-half select">
+            <label>Your Listings</label>
+            <%= f.select :space_id, options_for_select(@spaces.collect {|u| [u.title, u.id]}, params[:space_id]), {}, {
+              onchange: "this.form.submit();",
+              class: "form-control",
+              style: "height: 46px;"
+            } %>
+            <%= f.hidden_field :start_date, id: "start-date", value: params[:start_date], onchange: "$(this.form).submit()" %>
+          </div>
+        <% end %>
+        <br/>
+        <div class="column is-2 fc-content">
+          <span class="fc-title" style="color:#fff;">Confirmed Booking</span>
+        </div>
+        <div class="column is-2 fc-content Waiting">
+          <span class="fc-title" style="color:#fff;">Pending Approval</span>
+        </div>
+        <div class="column is-2 fc-content fc-past" style="background-color:lightgrey;">
+          <span class="fc-title" style="color:#fff;">Unavailable</span>
+        </div>
+
+
+      </div>
+    <% end %>
+
+    <%= render 'form' %>
+    <%= render 'event' %>
+
+    <div id="calendar" class="columns is-full"></div>
+  </div>
+</div>
+
+
+<script>
+  window.reservations = <%= raw @events.to_json %>
+  window.days = <%= raw @days.to_json %>
+
+  function showReservations(data) {
+    return data.map(function (e) {
+      if (e['start_date'].day !== e['end_date'].day) {
+        e['end_date'] = moment.utc(e['end_date']).add(1, 'days')
+      }
+
+      return {
+        name: e.fullname,
+        start: e['start_date'],
+        end: e['end_date'],
+        avatar: e.image,
+        status: e.status,
+      }
+    })
+  }
+
+  console.log(showReservations)
+
+  $('#calendar').fullCalendar({
+    header: {
+      left: 'month, agendaWeek',
+      center: 'title',
+      right: 'prev,next'
+    },
+    defaultDate: $('#start-date').val(),
+    events: showReservations(reservations),
+    eventRender: function(event, element, view) {
+      return $(`
+        <a href="<%= bookings_path %>" class="fc-day-grid-event fc-h-event fc-event fc-start fc-end">
+          <div class="fc-content ${event.status}">
+            <span class="fc-title">
+              <figure class="image is-24x24">
+                <img class="is-rounded" src="${event.avatar}">
+                </figure>
+              ${event.name}
+            </span>
+          </div>
+        </a>
+      `);
+    },
+
+    eventClick: function(event, jsEvent, view) {
+
+      // $('#event_view').modal('show');
+
+      // alert('Event: ' + event.name);
+      // alert('Coordinates: ' + jsEvent.pageX + ',' + jsEvent.pageY);
+      // alert('View: ' + view.name);
+
+      // change the border color just for fun
+      // $(this).css('border-color', 'red');
+
+    },
+
+    dayRender: function(date, cell) {
+      var dayInfo = $.grep(days, function(e) {
+        return e.day === date.format();
+      });
+
+      console.log(dayInfo);
+
+      <% if !@spaces.blank? %>
+        if (dayInfo.length > 0) {
+          if (dayInfo[0].status == "Not_Available") {
+            cell.addClass('fc-past');
+          } else {
+            cell.append('<span class="day-price-special">' + '$' + dayInfo[0].price + '</span>')
+          }
+        } else {
+          cell.append('<span class="day-price">' + '$<%= @space.price %>' + '</span>')
+        }
+      <% end %>
+
+    },
+    selectable: true,
+    select: function(start, end, jsEvent, view) {
+      var start_date = moment(start);
+      var end_date = moment(end).subtract(1, "days");
+
+      <% if @spaces.blank? %>
+        $('#calendar').fullCalendar('unselect');
+      <% end %>
+
+      var overlap = reservations.filter(function(e) {
+        var r_start_date = moment(e.start_date);
+        var r_end_date = moment(e.end_date).subtract(1, "days");
+
+        return (r_start_date.isSameOrBefore(end_date) && r_end_date.isSameOrAfter(start_date))
+      }).length > 0;
+
+      if(start.isBefore(moment()) || overlap) {
+        $('#calendar').fullCalendar('unselect')
+      } else {
+        $('#new_calendar').modal('show');
+
+        $('#calendar_start_date').datepicker({
+          dateFormat: "yy-mm-dd",
+          setDate: start_date
+        });
+        $('#calendar_start_date').val(start_date.format("YYYY-MM-DD"));
+
+        $('#calendar_end_date').datepicker({
+          dateFormat: "yy-mm-dd",
+          setDate: end_date
+        });
+        $('#calendar_end_date').val(end_date.format("YYYY-MM-DD"));
+
+      }
+    }
+  });
+
+  $('.fc-prev-button').click(function() {
+    var current = new Date(moment($('#start-date').val()));
+    var prev = new Date(current.getFullYear(), current.getMonth() - 1, 1)
+    $('#start-date').val(moment(prev).format('YYYY-MM-DD'))
+    $('#start-date').trigger('change')
+  });
+
+  $('.fc-next-button').click(function() {
+    var current = new Date(moment($('#start-date').val()));
+    var next = new Date(current.getFullYear(), current.getMonth() + 1, 1)
+    $('#start-date').val(moment(next).format('YYYY-MM-DD'))
+    $('#start-date').trigger('change')
+  });
+
+</script>

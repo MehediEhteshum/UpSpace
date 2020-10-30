@@ -1,0 +1,70 @@
+<div class="columns">
+
+  <div class="column is-2">
+    <%= render 'admin_menu' %>
+  </div>
+
+  <div class="column is-10">
+
+    <div class="has-text-centered"><h2 class="title is-2">Admin Dashboard</h2></div>
+
+    <div class="columns is-multiline">
+      <div class="column is-full">
+        <div class="has-text-centered"><h3 class="title is-3">Reservations</h3></div>
+        <% if @upcoming_reservations.any? %>
+          <h4 class="title is-4">Upcoming</h4>
+          <%= render 'upcoming_reservations' %>
+        <% end %>
+        <h4 class="title is-4">Booking Value</h4>
+        <%= column_chart [
+          {name: "Accepted", data: @chart_booking_value_accepted, color: ["#009874"], visible: false},
+          {name: "Pending", data: @chart_booking_value_pending, color: ["#EFC050"]},
+          {name: "Declined", data: @chart_booking_value_declined, color: ["#DD4124"], visible: false},
+          {name: "Cancelled", data: @chart_booking_value_cancelled, color: ["#ACACAC"]},
+          {name: "Refunded", data: @chart_booking_value_refunded, color: ["#E30B5D"]},
+        ] %>
+      </div>
+      <div class="column is-full">
+        <h4 class="title is-4">Bookings</h4>
+        <%= column_chart [
+          {name: "Accepted", data: @chart_bookings_accepted, color: ["#009874"]},
+          {name: "Pending", data: @chart_bookings_pending, color: ["#EFC050"]},
+          {name: "Declined", data: @chart_bookings_declined, color: ["#DD4124"]},
+          {name: "Cancelled", data: @chart_bookings_cancelled, color: ["#ACACAC"]},
+          {name: "Refunded", data: @chart_bookings_refunded, color: ["#E30B5D"]},
+        ] %>
+        <h4 class="title is-4">Total Requests: <%= @total_booking_requests %></h4>
+        <h4 class="title is-4">Accepted Bookings: <span class="text-green"><%= @accepted_booking_requests %></span></h4>
+        <h4 class="title is-4">Accepted Value: <span class="text-jenn">$<%= @accepted_booking_value %></span></h4>
+      </div>
+    </div>
+
+    <div class="has-text-centered"><h3 class="title is-3">Users</h3></div>
+    <div class="column is-two-thirds">
+      <%= column_chart [
+        {name: "User Signups", data: @chart_user_signups, color: ["#009874"]},
+        {name: "Active Users", data: @chart_active_users, color: ["#E30B5D"]}
+      ] %>
+    </div>
+    <div class="column is-one-third">
+      <h4>Total Users: <span class="text-green"><%= @total_users %></span></h4>
+      <h4>Active Users (Last 30 Days): <span class="text-jenn"><%= @active_users %></span></h4>
+    </div>
+
+    <div class="has-text-centered"><h3 class="title is-3">Spaces</h3></div>
+    <div class="columns">
+      <div class="column is-half">
+        <h4 class="title is-4"><span class="text-green"><%= @total_spaces %></span> Spaces Created with <span class="text-jenn"><%= @published_spaces %></span> Published</h4>
+        <%= column_chart [
+          {name: "Spaces Created", data: @chart_spaces_created, color: ["#009874"]}
+        ] %>
+      </div>
+      <div class="column is-half">
+        <h4 class="title is-4">Categories</h4>
+        <%= pie_chart Space.group(:listing_category).count %>
+      </div>
+    </div>
+
+  </div>
+
+</div>

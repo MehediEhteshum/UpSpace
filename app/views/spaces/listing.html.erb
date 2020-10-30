@@ -1,0 +1,37 @@
+<div class="columns">
+  <div class="column is-one-quarter">
+    <%= render 'space_menu' %>
+  </div>
+  <div class="column is-three-quarters">
+    <div class="card is-shadowless">
+      <div class="card-content">
+        <%= form_for @space do |f| %>
+          <div class="field is-grouped is-grouped-centered">
+            <div class="control">
+              <p>Category</p>
+              <div class="select">
+                <%= f.select :listing_category, [["Art Gallery", "Art Gallery"], ["Banquet Hall", "Banquet Hall"], ["Boardroom", "Boardroom"], ["Cafe or Coffee Shop", "Cafe or Coffee Shop"], ["Classroom", "Classroom"], ["Community Center", "Community Center"],
+                ["Coworking Space", "Coworking Space"], ["Event Centre", "Event Centre"], ["Golf Club", "Golf Club"], ["Government Office", "Government Office"], ["Health/Wellness Studio", "Health/Wellness Studio"],
+                ["Hotel", "Hotel"], ["Lounge", "Lounge"], ["Meeting Space", "Meeting Space"], ["Outdoor Space", "Outdoor Space"], ["Pub", "Pub"], ["Religious Institution", "Religious Institution"],
+                ["Restaurant", "Restaurant"], ["Salon/Spa", "Salon/Spa"], ["Sports Facility", "Sports Facility"], ["Workspace", "Workspace"]], id: "listing_category", prompt: "Select..." %>
+              </div>
+            </div>
+            <div class="control">
+              <p>Capacity</p>
+              <%= f.number_field :capacity, in: 1..10000, step: 1, id: "capacity", prompt: "Select...", class: "input" %>
+            </div>
+            <div class="control">
+              <p>Parking</p>
+              <div class="select">
+                <%= f.select :parking, [["Free", "Free"], ["Paid", "Paid"], ["Unavailable", "Unavailable"]], id: "parking", prompt: "Select...", class: "form-control" %>
+              </div>
+            </div>
+          </div>
+          <div class="has-text-centered mt-10">
+            <div><%= f.submit "Save", class: "button is-medium is-primary" %></div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

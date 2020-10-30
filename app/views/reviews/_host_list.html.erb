@@ -1,0 +1,48 @@
+<% if @host_reviews.count != 0 %>
+
+  <% @host_reviews.order(id: :desc).each_with_index do |r, index| %>
+    <div class="card is-shadowless">
+      <div class="card-content">
+        <div class="media">
+          <div class="media-left">
+
+              <% if current_user && current_user == r.host %>
+                <figure class="image is-48x48 is-pulled-left mt-2">
+                  <%= link_to r, method: :delete, data: {confirm: "Are you sure?"} do %>
+                    <i class="far fa-trash-alt fa-2x icon-red"></i>
+                  <% end %>
+                </figure>
+              <% end %>
+
+            <figure class="image is-48x48 is-pulled-left">
+              <%= image_tag avatar_url(r.host), class: "is-rounded" %>
+            </figure>
+          </div>
+          <div class="media-content">
+            <p class="title is-4"><%= r.host.fullname %></p>
+            <p class="subtitle is-6"><%= r.created_at.strftime('%d %b %Y') %></p>
+          </div>
+          <div class="media-right">
+            <div id="star_<%= r.id %>" class="star-review mt-2"></div>
+          </div>
+        </div>
+        <div class="content has-text-left">
+          <p class="is-size-5"><%= r.comment %></p>
+        </div>
+      </div>
+    </div>
+
+    <% unless index == @host_reviews.size - 1%>
+      <hr>
+    <% end %>
+
+    <script>
+      $('#star_<%= r.id %>').raty({
+        readOnly: true,
+        score: <%= r.star %>
+      });
+    </script>
+
+  <% end %>
+
+<% end %>

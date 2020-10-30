@@ -1,0 +1,80 @@
+<ul class="sidebar-link">
+  <li <% if current_page?(listing_space_path) %>class="sidebar-item active"<% else %>class="sidebar-item"<% end %>>
+    <% if current_page?(listing_space_path) %>
+      <%= link_to "Listing", listing_space_path, class: "sidebar-link active" %>
+    <% else %>
+      <%= link_to "Listing", listing_space_path, class: "sidebar-link" %>
+    <% end %>
+    <span class="is-pulled-right icon-green"><i class="fas fa-check"></i></span>
+  </li>
+
+  <li <% if current_page?(description_space_path) %>class="sidebar-item active"<% else %>class="sidebar-item"<% end %>>
+    <% if current_page?(description_space_path) %>
+      <%= link_to "Description", description_space_path, class: "sidebar-link active" %>
+    <% else %>
+      <%= link_to "Description", description_space_path, class: "sidebar-link" %>
+    <% end %>
+    <% if !@space.description.blank? %>
+      <span class="is-pulled-right icon-green"><i class="fas fa-check"></i></span>
+    <% end %>
+  </li>
+
+  <li <% if current_page?(photo_upload_space_path) %>class="sidebar-item active"<% else %>class="sidebar-item"<% end %>>
+    <% if current_page?(photo_upload_space_path) %>
+      <%= link_to "Photos", photo_upload_space_path, class: "sidebar-link active" %>
+    <% else %>
+      <%= link_to "Photos", photo_upload_space_path, class: "sidebar-link" %>
+    <% end %>
+    <% if !@space.photos.blank? %>
+      <span class="is-pulled-right icon-green"><i class="fas fa-check"></i></span>
+    <% end %>
+  </li>
+
+  <li <% if current_page?(pricing_space_path) %>class="sidebar-item active"<% else %>class="sidebar-item"<% end %>>
+    <% if current_page?(pricing_space_path) %>
+      <%= link_to "Pricing", pricing_space_path, class: "sidebar-link active" %>
+    <% else %>
+      <%= link_to "Pricing", pricing_space_path, class: "sidebar-link" %>
+    <% end %>
+    <% if @space.has_active_price %>
+      <span class="is-pulled-right icon-green"><i class="fas fa-check"></i></span>
+    <% end %>
+  </li>
+
+  <li <% if current_page?(location_space_path) %>class="sidebar-item active"<% else %>class="sidebar-item"<% end %>>
+    <% if current_page?(location_space_path) %>
+      <%= link_to "Location", location_space_path, class: "sidebar-link active" %>
+    <% else %>
+      <%= link_to "Location", location_space_path, class: "sidebar-link" %>
+    <% end %>
+    <% if !@space.address.blank? && !@space.longitude.blank? && !@space.latitude.blank? %>
+      <span class="is-pulled-right icon-green"><i class="fas fa-check"></i></span>
+    <% end %>
+  </li>
+
+  <% if !current_user.is_active_host || current_user.spaces.count == 1 %>
+    <li class="sidebar-item <%= 'active' if current_page?(payout_space_path) %>">
+      <% if current_page?(payout_space_path) %>
+        <%= link_to "Get Paid", payout_space_path, class: "sidebar-link active" %>
+      <% else %>
+        <%= link_to "Get Paid", payout_space_path, class: "sidebar-link" %>
+      <% end %>
+      <% if current_user.is_active_host %>
+        <span class="is-pulled-right icon-green"><i class="fas fa-check"></i></span>
+      <% end %>
+    </li>
+  <% end %>
+
+</ul>
+<hr/>
+
+<% is_ready = current_user.is_active_host && !@space.active && @space.has_active_price && !@space.title.blank? && !@space.photos.blank? && !@space.address.blank? && !@space.latitude.blank? && !@space.longitude.blank? %>
+
+<% if !@space.active && is_ready %>
+  <%= form_for @space do |f| %>
+    <%= f.hidden_field :active, value: true %>
+    <%= f.submit "Publish", id: "publish_button", class: "button is-fullwidth is-danger" %>
+  <% end %>
+<% elsif @space.active %>
+  <%= link_to "View", space_path, class: "button is-fullwidth is-danger" %>
+<% end %>

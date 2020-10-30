@@ -1,0 +1,203 @@
+<div class="steps mb-5">
+  <div class="step-item is-active">
+    <div class="step-marker">
+      <span class="icon">
+        <i class="far fa-credit-card"></i>
+      </span>
+    </div>
+    <div class="step-details">
+      <p class="step-title">Payment</p>
+    </div>
+  </div>
+  <div class="step-item">
+    <div class="step-marker">
+      <span class="icon">
+        <i class="fas fa-pencil-alt"></i>
+      </span>
+    </div>
+    <div class="step-details">
+      <p class="step-title">Details</p>
+    </div>
+  </div>
+  <div class="step-item">
+    <div class="step-marker">3</div>
+    <div class="step-details">
+      <p class="step-title">Review</p>
+    </div>
+  </div>
+  <div class="step-item">
+    <div class="step-marker">
+      <span class="icon">
+        <i class="fa fa-flag"></i>
+      </span>
+    </div>
+    <div class="step-details">
+      <p class="step-title">Done</p>
+    </div>
+  </div>
+</div>
+
+<div class="columns">
+  <div class="column is-two-thirds">
+    <div class="columns is-multiline">
+      <div class="column is-fullwidth">
+        <div class="card">
+          <div class="card-content">
+            <div class="content">
+              <p class="title is-4">Payment</p>
+            </div>
+            <% if current_user.remember_card? %>
+              <div id="current_card" class="content">
+                <div class="column has-text-centered">
+                  <i class="fab fa-cc-<%= @stripe_card.brand.downcase %> fa-2x"></i>
+                  <%=  + @stripe_card.last4 + " Exp: " + @stripe_card.exp_month.to_s + "/" + @stripe_card.exp_year.to_s %>
+                </div>
+                <div class="column has-text-centered">
+                  <button id="change_card" class="button is-light">Change Card</button>
+                  <%= link_to "Continue", use_default_card_path, class: "button is-danger" %>
+                </div>
+              </div>
+              <div id="new_card" class="content">
+                <%= form_tag("/add_payment/#{@reservation.id}", method: "post", id: "payment-form") do %>
+                  <div class="field form-row y-5">
+                    <div class="control">
+                      <div id="card-element">
+                        <!-- A Stripe Element will be inserted here. -->
+                      </div>
+                    </div>
+                    <!-- Used to display form errors. -->
+                    <div id="card-errors" role="alert" class="text-red"></div>
+                  </div>
+                  <div class="column has-text-centered">
+                    <button id="default_card" class="button is-light">Default Card</button>
+                    <button type="submit" class="button is-danger is-centered">Continue</button>
+                  </div>
+                <% end %>
+              </div>
+            <% else %>
+              <div class="content">
+                <%= form_tag("/add_payment/#{@reservation.id}", method: "post", id: "payment-form") do %>
+                  <div class="field form-row y-5">
+                    <div class="control">
+                      <div id="card-element">
+                        <!-- A Stripe Element will be inserted here. -->
+                      </div>
+                    </div>
+                    <!-- Used to display form errors. -->
+                    <div id="card-errors" role="alert" class="text-red"></div>
+                  </div>
+                  <div class="column has-text-centered">
+                    <button type="submit" class="button is-danger is-centered">Continue</button>
+                  </div>
+                <% end %>
+              </div>
+            <% end %>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+  <%= render 'reservation_summary' %>
+</div>
+
+<script>
+  $(document).ready(function () {
+    $('#new_card').hide();
+    $('#change_card').on('click', function () {
+      $('#new_card').show();
+      $('#current_card').hide();
+    })
+    $('#default_card').on('click', function () {
+      $('#new_card').hide();
+      $('#current_card').show();
+    })
+  })
+</script>
+
+<script src="https://js.stripe.com/v3/"></script>
+
+<script>
+  // Create a Stripe client.
+  var stripe = Stripe('<%= @stripe_key %>');
+
+  // Create an instance of Elements.
+  var elements = stripe.elements();
+
+  // Custom styling can be passed to options when creating an Element.
+  // (Note that this demo uses a wider set of styles than the guide below.)
+  var style = {
+    base: {
+      color: '#32325d',
+      fontFamily: '"Nunito", "Helvetica Neue", Helvetica, sans-serif',
+      fontSmoothing: 'antialiased',
+      fontSize: '16px',
+      '::placeholder': {
+        color: '#aab7c4'
+      }
+    },
+    invalid: {
+      color: '#fa755a',
+      iconColor: '#fa755a'
+    }
+  };
+
+  // Create an instance of the card Element.
+  var card = elements.create('card', {
+    hidePostalCode: true,
+    style: style
+  });
+
+  // Add an instance of the card Element into the `card-element` <div>.
+  card.mount('#card-element');
+
+  // Handle real-time validation errors from the card Element.
+  card.addEventListener('change', function(event) {
+    var displayError = document.getElementById('card-errors');
+    if (event.error) {
+      displayError.textContent = event.error.message;
+    } else {
+      displayError.textContent = '';
+    }
+  });
+
+  // Handle form submission.
+  var form = document.getElementById('payment-form');
+  form.addEventListener('submit', function(event) {
+    event.preventDefault();
+
+    stripe.createToken(card).then(function(result) {
+      if (result.error) {
+        // Inform the user if there was an error.
+        var paymentModal = document.getElementById('modalpayment');
+        var reviewModal = document.getElementById('modalreview');
+        var errorElement = document.getElementById('card-errors');
+        errorElement.textContent = result.error.message;
+        setTimeout(function () {
+            paymentModal.classList.add('is-active','fadeIn');
+            paymentModal.classList.remove('fadeOut');
+            reviewModal.classList.add('fadeOut');
+            reviewModal.classList.remove('is-active','fadeIn');
+        } , 300);
+      } else {
+        // Send the token to your server.
+        stripeTokenHandler(result.token);
+      }
+    });
+  });
+
+  // Submit the form with the token ID.
+  function stripeTokenHandler(token) {
+    // Insert the token ID into the form so it gets submitted to the server
+    var form = document.getElementById('payment-form');
+    var hiddenInput = document.createElement('input');
+    hiddenInput.setAttribute('type', 'hidden');
+    hiddenInput.setAttribute('name', 'stripeToken');
+    hiddenInput.setAttribute('value', token.id);
+    form.appendChild(hiddenInput);
+
+    // Submit the form
+    form.submit();
+    e.preventDefault();
+  }
+</script>

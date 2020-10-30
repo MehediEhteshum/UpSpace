@@ -1,0 +1,18 @@
+<div class="card">
+  <div class="card-content">
+    <div class="media">
+      <div class="media-left">
+        <figure class="image is-48x48">
+          <%= image_tag avatar_url(message.user), class: "is-rounded" %>
+        </figure>
+      </div>
+      <div class="media-content">
+        <p class="title is-4"><%= message.user.fullname %></p>
+        <p class="subtitle is-6"><%= message.message_date %> at <%= message.message_time %></p>
+      </div>
+    </div>
+    <div class="content">
+      <%= simple_format(message.context) %>
+    </div>
+  </div>
+</div>

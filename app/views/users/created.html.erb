@@ -1,0 +1,47 @@
+<style>
+  .select-container .avatar-max {
+    width: 125px;
+  }
+</style>
+<div class="select-container column has-text-centered">
+  <h2 class="title is-2">Thanks <%= current_user.fullname %></h2>
+
+  <label class="label">Your user photo:</label>
+  <%= render 'avatars/form'%>
+  
+  <div class="columns mt-5 is-mobile">
+    <div class="column is-half-tablet is-full-mobile is-offset-one-quarter-tablet">
+      
+      <label class="label">Are you a business and have space to list?</label>
+      <div class="mt-5 mb-5">
+
+        <div class="select">
+          <%= select_tag(:lister, options_for_select([['Please Select'], ['Yes', 0], ['No', 1]], disabled: 'Please Select', selected: 'Please Select')) %>
+        </div>
+      </div>
+      <button disabled class="submit-button button is-danger">Submit</button>
+    </div>
+  </div>
+
+</div>
+
+<%= render 'new_host' %>
+<%= render 'new_renter' %>
+
+<script>
+  $(function(){
+    var submitBtn = $('.submit-button'),
+      listerSelect = $('#lister');
+    listerSelect.on('change', function(event){
+      submitBtn.prop('disabled', false);
+    });
+
+    submitBtn.on('click', function(event){
+      $.ajax({
+        method: 'GET',
+        url: '/dashboard/' + listerSelect.val(),
+        dataType: 'script'
+      });
+    });
+  });
+</script>

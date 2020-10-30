@@ -1,0 +1,31 @@
+<div class="columns">
+  <div class="column is-one-quarter">
+    <div class="card is-shadowless">
+      <div class="card-content">
+        <ul class="sidebar-list">
+          <li class="sidebar-item"><%= link_to "Payment Method", payment_method_path, class: "sidebar-link" %></li>
+          <li class="sidebar-item active"><%= link_to "Payout Details", payout_method_path, class: "sidebar-link" %></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="column is-three-quarters">
+    <div class="card is-shadowless">
+      <div class="card-content has-text-centered">
+        <% if current_user.merchant_id.blank? %>
+          <p class="hidden">You'll need to connect a <a href="https://stripe.com/ca" target="_blank">Stripe</a> account before you can receive payments for your bookings.</p>
+          <p class="title is-3"><%= link_to "Log in", stripe_express_login_path %> to Stripe</p>
+          <p class="title is-4">Need an account? Create one <%= link_to "here", stripe_express_path %></p>
+        <% else %>
+          Thank you for linking your Stripe account. Please login below to view your payout details.<br/><br/>
+          <%= link_to "Stripe Dashboard", @login_link, class: "button is-primary" %>
+        <% end %>
+      </div>
+    </div>
+    <div class="card is-shadowless">
+      <div class="card-content">
+        We take your security seriously. Your payment details are handled by <a href="https://stripe.com/ca" target="_blank">Stripe</a>. As an industry leader in online payments, <a href="https://stripe.com/ca" target="_blank">Stripe</a> securely processes billions of dollars annually.
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,121 @@
+<nav class="navbar is-fixed-top" role="navigation" aria-label="main navigation">
+  <div class="navbar-brand">
+    <%= link_to 'up<span style="color:#009874;">Space</span>'.html_safe, root_path, class: "navbar-item navbar-logo" %>
+
+    <% if (!user_signed_in?) %>
+      <div class="navbar-item auth-button-container">
+        <div class="buttons">
+          <%= link_to "Sign Up", '#', "data-target"=>"modaldeviseregister", class: "button modal-button is-danger" %>
+          <%= link_to "Log In", '#', "data-target"=>"modaldeviselogin", class: "button modal-button is-light login_btn" %>
+        </div>
+      </div>
+    <% else %>
+    <%= link_to notifications_path, class: "navbar-notification" do %>
+      <div class="navbar-item p-0 mr-4">
+        <i class="fas fa-bell fa-lg icon-green"></i>
+        <% if current_user.unread > 0 %>
+          <span class="badge is-badge-small is-badge-danger" data-badge="<%= current_user.unread %>" id="navbar_num_of_unread"></span>
+        <% end %>
+      </div>
+    <% end %>
+
+    <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+    </a>
+  </div>
+
+  <div id="navbar" class="navbar-menu">
+
+    <div class="navbar-end">
+
+      <div class="navbar-item has-dropdown is-hoverable navbar-dropdown-container">
+
+        <a class="navbar-link link-name is-hidden-touch">
+          <figure class="image is-24x24 mr-2">
+            <%= image_tag avatar_url(current_user), class: "is-rounded" %>
+          </figure>
+          <%= current_user.fullname %>
+        </a>
+
+        <div class="navbar-dropdown is-right">
+          <% if current_user.try(:admin?) %>
+            <%= link_to "Admin", admin_users_path, class: "navbar-item" %>
+          <% end %>
+          <%= link_to "Dashboard", dashboard_path, class: "navbar-item" %>
+          <%= link_to "Manage Spaces", spaces_path, class: "navbar-item" %>
+          <%= link_to "Bookings", bookings_path, class: "navbar-item" %>
+          <%= link_to "Messages", conversations_path, class: "navbar-item" %>
+          <%= link_to "Favourites", favourites_path, class: "navbar-item" %>
+          <hr class="navbar-divider">
+          <%= link_to "Edit Profile", edit_user_registration_path, class: "navbar-item" %>
+          <%= link_to "Payment Settings", payment_method_path, class: "navbar-item" %>
+          <%= link_to "Log Out", destroy_user_session_path, method: :delete, class: "navbar-item" %>
+        </div>
+      </div>
+      <% end %>
+
+    </div>
+  </div>
+</nav>
+
+<% if (user_signed_in?) && !current_page?(root_path) && !current_page?(search_path) && !current_page?("spaces#{params[:id]}") && !current_page?(new_space_path) && !current_page?(new_user_created_path)%>
+
+<nav class="navbar has-shadow" style="z-index: 5;">
+  <div class="container">
+    <div class="navbar">
+      <% if current_user.try(:admin?) %>
+        <%= link_to "Admin", admin_users_path, class: "navbar-item active" %>
+      <% end %>
+      <%= link_to "Dashboard", dashboard_path, class: "navbar-item" %>
+      <%= link_to "All Reservations", your_trips_path, class: "navbar-item" %>
+      <%= link_to "Manage Spaces", spaces_path, class: "navbar-item" if current_user.spaces.any? %>
+      <%= link_to "Bookings", bookings_path, class: "navbar-item" if current_user.spaces.any? %>
+      <%= link_to "Messages", conversations_path, class: "navbar-item" %>
+      <%# link_to "Calendar", host_calendar_path, class: "navbar-item" if current_user.spaces.any? %>
+      <%= link_to "Favourites", favourites_path, class: "navbar-item" %>
+    </div>
+  </div>
+</nav>
+<script>
+  $(document).ready(function () {
+    $('.main').addClass('has-sub-nav');
+  });
+</script>
+<% end %>
+
+<script>
+  $(document).ready(function () {
+    // Check for click events on the navbar burger icon
+    $(".navbar-burger").click(function () {
+      // Toggle the "is-active" class on both the "navbar-burger" and the "navbar-menu"
+      $(".navbar-burger").toggleClass("is-active");
+      $(".navbar-menu").toggleClass("is-active");
+    });
+  });
+
+    var $win = $(window),
+      hasHeroBanner = $('.has-hero-banner').length;
+    
+    function onScroll() {
+        var position = $win.scrollTop(),
+          body = $(document.body),
+          navBar = $('.navbar.is-fixed-top');
+        
+        if (position > 5) {
+          navBar.addClass('has-shadow');
+          if (hasHeroBanner){
+            body.addClass('navbar-show-bg');
+          }
+        } else {
+          navBar.removeClass('has-shadow');
+          if (hasHeroBanner){
+            body.removeClass('navbar-show-bg');
+          }
+        }
+    }
+
+    $win.scroll(onScroll);
+    onScroll();
+</script>

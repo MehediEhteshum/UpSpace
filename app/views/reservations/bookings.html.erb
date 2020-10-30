@@ -1,0 +1,58 @@
+<div class="columns">
+  <div class="column is-full">
+    <div class="card is-shadowless">
+      <div class="card-header is-shadowless">
+        <div class="card-header-title">
+          <p class="title is-4">All Bookings</p>
+        </div>
+      </div>
+      <div class="card-content">
+
+        <% @reservations.each do |reservation| %>
+          <div class="columns">
+            <div class="column is-4">
+              <p>Status: <%= reservation.status %></p>
+              <p><%= link_to reservation.space.title, space_path(reservation.space) %></p>
+              <%= link_to user_path(reservation.user) do %>
+                <figure class="image is-24x24 is-inline-block">
+                  <%= image_tag avatar_url(reservation.user), class: 'is-rounded' %>
+                </figure>
+                <div class="is-inline-block">
+                  <%= reservation.user.fullname %>
+                </div>
+              <% end %>
+            </div>
+            <div class="column is-2">
+              <p>From:</p>
+              <p><%= reservation.start_date.in_time_zone(current_user.time_zone).strftime('%h %d, %G') %></p>
+              <p><%= reservation.start_date.in_time_zone(current_user.time_zone).strftime('%r') %></p>
+            </div>
+            <div class="column is-2">
+              <p>To:</p>
+              <p><%= reservation.end_date.in_time_zone(current_user.time_zone).strftime('%h %d, %G') %></p>
+              <p><%= reservation.end_date.in_time_zone(current_user.time_zone).strftime('%r') %></p>
+            </div>
+            <div class="column is-2">
+              <p>Total:</p>
+              <p><%= number_to_currency(reservation.total) %></p>
+            </div>
+            <div class="column is-2 has-text-centered">
+              <% if reservation.Waiting? %>
+                <%= button_to "Approve", approve_reservation_path(reservation), method: :post, data: { disable_with: "Processing..." }, class: "button is-danger is-fullwidth" %>
+                <%= link_to "Decline", decline_reservation_path(reservation), method: :post, class: "button is-light is-fullwidth mt-1" %>
+              <% elsif reservation.Approved? %>
+                <% if reservation.authorized_at? %>
+                  <%= render partial: "approved_modal", locals: {reservation: reservation} %>
+                <% end %>
+                  <% if !reservation.has_host_review %>
+                    <%= render partial: "reviews/host_form", locals: {reservation: reservation} %>
+                  <% end %>
+              <% end %>
+            </div>
+          </div>
+          <hr>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

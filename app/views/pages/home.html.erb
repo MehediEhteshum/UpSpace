@@ -1,0 +1,181 @@
+</div> <!-- End Application Layout Container -->
+
+<%= render 'home_hero'%>
+
+<div class="container has-text-centered"> <!-- Restart Application Layout Container -->
+
+  <div class="columns is-multiline mt-10 has-text-centered">
+    <div id="category" class="anchor"></div>
+    <div class="column is-full">
+      
+      <p><h2 class="title is-2">Intro to upSpace</h2></p>
+    
+     <div class="container has-text-centered mt-10"> 
+<div class="column is-full mt-10">
+<div class="up-video-container">
+<iframe width="560" height="315" src="
+https://www.youtube.com/embed/LHp23xqaQpk" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+</div>
+</div>
+</div>
+    
+    <h2 class="title is-2 mt-10">What kind of space do you need?</h2>
+    </div>
+    <div class="column is-2 is-offset-3">
+     <div class="card is-shadowless">
+          <%= link_to search_path(q: {listing_category_cont_any: @healthy_categories}) do %>
+            <%= image_tag "/homecard-healthy-square.jpg", alt:"Healthy Space", class: "img-responsive homecard-img" %>
+          <% end %>
+          <h3 class="homecard-text"><%= link_to "Fitness", search_path(q: {listing_category_cont_any: @healthy_categories}) %></h3>
+      </div>
+    </div>
+    <div class="column is-2">
+      <div class="card is-shadowless">
+        <%= link_to search_path(q: {listing_category_cont_any: @meeting_categories}) do %>
+          <%= image_tag "/homecard-meeting-square.jpg", alt:"Meeting Space", class: "img-responsive homecard-img" %>
+        <% end %>
+        <h3 class="homecard-text"><%= link_to "Meeting", search_path(q: {listing_category_cont_any: @meeting_categories}) %></h3>
+      </div>
+    </div>
+    <div class="column is-2">
+      <div class="card is-shadowless">
+        <%= link_to search_path(q: {listing_category_cont_any: @social_categories}) do %>
+          <%= image_tag "/homecard-social-square.jpg", alt:"Meeting Space", class: "img-responsive homecard-img" %>
+        <% end %>
+        <h3 class="homecard-text"><%= link_to "Social", search_path(q: {listing_category_cont_any: @social_categories}) %></h3>
+      </div>
+    </div>
+    <div class="column is-2 is-offset-3">
+      <div class="card is-shadowless">
+        <%= link_to search_path(q: {listing_category_cont_any: @coworking_categories}) do %>
+          <%= image_tag "/homecard-coworking-square.jpg", alt:"Coworking Space", class: "img-responsive homecard-img" %>
+        <% end %>
+        <h3 class="homecard-text"><%= link_to "Coworking", search_path(q: {listing_category_cont_any: @meeting_categories}) %></h3>
+      </div>
+    </div>
+    <div class="column is-2">
+      <div class="card is-shadowless">
+        <%= link_to search_path(q: {listing_category_cont_any: @classroom_categories}) do %>
+          <%= image_tag "/homecard-classroom-square.jpg", alt:"Classroom Space", class: "img-responsive homecard-img" %>
+        <% end %>
+        <h3 class="homecard-text"><%= link_to "Classroom", search_path(q: {listing_category_cont_any: @social_categories}) %></h3>
+      </div>
+    </div>
+    <div class="column is-2">
+      <div class="card is-shadowless">
+        <%= link_to search_path do %>
+          <%= image_tag "/homecard-all-square.jpg", alt:"Meeting Space", class: "img-responsive homecard-img" %>
+        <% end %>
+        <h3 class="homecard-text"><%= link_to  "All Spaces", search_path %></h3>
+      </div>
+    </div>
+  </div>
+
+  <hr>
+
+  <div class="columns is-multiline mt-10">
+    <div id="featured" class="anchor"></div>
+    <div class="column is-full has-text-centered">
+      <h2 class="title is-2">Featured Spaces</h2>
+    </div>
+    <%= render partial: "spaces/spaces_list_thirds", locals: {spaces: @featured} %>
+  </div>
+
+  <hr>
+  
+  <%= render 'host_info'%>
+
+  <hr>
+
+  <div class="container is-multiline mt-10 has-text-centered is-hidden-touch">
+    <div id="testimonials" class="anchor"></div>
+    <div class="column is-full">
+      <h2 class="title is-2">Current Renter Requests</h2>
+    </div>
+    <div class="column is-two-thirds is-offset-2">
+      <div class="card is-shadowless">
+        <p class="is-size-4">Do you have space? Contact our renters today. Earn money renting your space.</p>
+        <p class="is-size-5">We’ve compiled a list of renters currently looking for space for meetings and events.</p>
+      </div>
+      <%= link_to "Search directory", space_requests_path, class: "button is-large is-primary mt-7" %>
+    </div>
+  </div>
+
+  <hr>
+
+  <div class="columns is-multiline mt-10 has-text-centered is-hidden-touch testimonials-container">
+    <div id="testimonials" class="anchor"></div>
+    <div class="column is-full">
+      <h2 class="title is-2">Testimonials</h2>
+    </div>
+    <div class="column is-two-thirds is-offset-2">
+      <div class="card is-shadowless">
+        <div class="hero-carousel text-carousel" id="carousel-testimonial" style="overflow:hidden;">
+          <div class="carousel-item testimonial">
+            <p class="is-size-4">
+              We were looking for a space for our Bayanihan Cafe and I had found upSpace online. It was really easy to search and then, pay and book our venue (Rideau Curling Club) with them. Plus when we had questions, they were super accommodating.
+            </p>
+            <p class="mt-3">Mailyne - Bayanihan Ottawa</p>
+          </div>
+          <div class="carousel-item testimonial">
+            <p class="is-size-4">
+              We use upSpace to market our facility and fill in the unused time slots. Excellent way to capitalize on your resources and bring in more revenue. User friendly platform that makes listing and interacting with clients a breeze.
+            </p>
+            <p class="mt-3">John - Gaia Wellness Retreat</p>
+          </div>
+          <div class="carousel-item testimonial">
+            <p class="is-size-4">
+              upSpace is a refreshing change from our usual referral partners for space. As a space provider we understand that partnering is part of doing business, but it can come at a cost sometimes. upSpace offers something better: no ads, local presence, lower commissions, easy to use portals, and a unique opportunity to showcase our spaces and offerings.
+            </p>
+            <p class="mt-3">Ashley - TCC</p>
+          </div>
+          <div class="carousel-item testimonial">
+            <p class="is-size-4">
+              I have rented my space through UpSpace twice and have been happy with the results. The renters were considerate and easy to have here. UpSpace is a great way to make the maximum use of your space.
+            </p>
+            <p class="mt-3">Heather - Here and Now Studio</p>
+          </div>
+          <div class="carousel-item testimonial">
+            <p class="is-size-4">
+              I was looking for a space to host my workshop the first weekend of June. I had a specific request, and within the hour upSpace messaged me back giving me EXACTLY what I needed. Thank you SO much for your amazing customer service.
+            </p>
+            <p class="mt-3">David</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="columns is-multiline mt-10">
+  <div id=“space requests” class="anchor"></div>
+  <div class="column is-full has-text-centered">
+    <h2 class="title is-2">Space Requests</h2>
+    </div>
+  <div id=“space requests text” class="anchor"></div>
+  <div class="column is-full has-text-centered">
+    <h2 class="title is-2">Can’t find what you need? You can <a href="https://upspace.ca/contact">send us a request</a> about your space rental needs.</h2>
+</div>
+
+<script>
+  bulmaCarousel.attach('.text-carousel', {
+    slidesToScroll: 1,
+    slidesToShow: 1,
+    loop: true,
+    autoplay: true,
+    autoplaySpeed: 7000
+  });
+</script>
+
+<style>
+  .testimonials-container {
+    background: #E6E6E6;
+    border-radius: 4px;
+    padding: 20px 10px;
+  }
+
+  .testimonials-container .card {
+    background: #E6E6E6;
+  }
+</style>

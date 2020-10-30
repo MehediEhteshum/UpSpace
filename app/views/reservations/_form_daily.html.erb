@@ -1,0 +1,203 @@
+<%= form_for([@space, @space.reservations.new], html: {id: "form" }) do |f| %>
+  <div id="alert-message" class="alert alert-danger text-center hidden"></div>
+  <div id="datepicker-container">
+    <%= f.text_field :start_date, id: "date_range", readonly: true, class: "input datepicker" %>
+  </div>
+  <div id="timepicker-container" class="mt-3">
+    <%= f.text_field :end_date, id: "time_range", readonly: false, class: "input timepicker" %>
+  </div>
+  <h4 class="message-alert text-center">
+    <span id="message"></span></h4>
+  <div id="preview" style="display: none;">
+    <table class="reservation-table">
+      <tbody>
+        <tr>
+          <td>Price</td>
+          <td class="has-text-right">$<%= @space.price %></td>
+        </tr>
+        <tr>
+          <td id="period"></td>
+          <td class="has-text-right">x<span id="reservation_days"></span></td>
+        </tr>
+        <tr id="special_details">
+          <td colspan="2" class="total">
+            Specials Price<br/>
+            <ul id="special_list"></ul>
+          </td>
+        </tr>
+        <tr>
+          <td class="total">Total</td>
+          <td class="has-text-right">$<span id="reservation_total"></span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+<% end %>
+
+<script>
+  $('#timepicker-container').hide();
+
+  // Initialize all input of type date
+  var calendars = bulmaCalendar.attach('.datepicker', {
+    type: 'date',
+    color: 'danger',
+    isRange: true,
+    displayMode: 'default',
+    showHeader: false,
+    dateFormat: 'DD MMM YYYY',
+    minDate: new Date(),
+    labelFrom: 'From',
+    labelTo: 'To',
+    showButtons: false,
+    showFooter: false
+  });
+  var timepickers = bulmaCalendar.attach('.timepicker', {
+    type: 'time',
+    color: 'danger',
+    isRange: true,
+    displayMode: 'default',
+    validateLabel: 'OK',
+    showClearButton: false,
+    minuteSteps: 15
+  });
+
+  var start_time = 0;
+  var end_time = 0;
+
+  var element = document.querySelector('#date_range');
+  if (element) {
+  	element.bulmaCalendar.on('select', function(datepicker) {
+      var start_date = datepicker.data.startDate;
+      var end_date = datepicker.data.endDate;
+      var days = (end_date - start_date) / 1000 / 60 / 60 / 24 + 1;
+      if (days == 1) {
+        start_time = (start_time === 0) ? new Date(start_date.setHours(9, 0, 0, 0)) : start_time;
+        end_time = (end_time === 0) ? new Date(start_date.setHours(17, 0, 0, 0)) : end_time;
+        var hours = (end_time - start_time) / 1000 / 60 / 60;
+        $('#timepicker-container').show(200);
+        specialCheck(start_time, end_time, hours);
+      } else {
+        $('#timepicker-container').hide(200);
+        specialCheck(start_date, end_date, days);
+      }
+      if (days == 1) {
+        $('#period').text('Hours');
+      } else {
+        $('#period').text('Days');
+      }
+  	});
+  }
+
+  var timeElement = document.querySelector('#time_range');
+  if (timeElement) {
+  	timeElement.bulmaCalendar.on('select', function(timepicker) {
+      start_time = timepicker.data.startTime;
+      end_time = timepicker.data.endTime;
+      var start_hours = start_time.getHours();
+      var end_hours = end_time.getHours();
+      if (end_hours > start_hours) {
+        hours = (end_time - start_time) / 1000 / 60 / 60;
+      } else {
+        hours = (start_time - end_time) / 1000 / 60 / 60;
+      }
+      specialCheck(start_time, end_time, hours);
+  	});
+  }
+
+  var unavailableDates = [];
+  var specialDates = [];
+
+  function specialCheck(start_date, end_date, days) {
+
+    var input = {
+      'start_date': start_date,
+      'end_date': end_date
+    }
+
+    console.log(input);
+
+    $.ajax({
+      url: '<%= preview_space_path(@space) %>',
+      data: input,
+      success: function (data) {
+
+        if (data.conflict) {
+          $('#message').text("These dates are not available");
+          $('#preview').hide();
+          $('#btn_book').attr('disabled', true);
+        } else {
+          $('#message').text("");
+          $('#preview').show();
+          $('#incomplete').hide();
+          $('#btn_book').removeClass('hidden');
+          $('#btn_book').attr('disabled', false);
+          $('#alert-message').addClass('hidden')
+
+          //----------- START NEW UPDATE
+
+          $('#special_list').empty();
+          var selectedDates = [];
+
+          // Step 1: Create an array of selected dates
+          while (start_date <= end_date) {
+            selectedDates.push($.datepicker.formatDate('d-m-yy', new Date(start_date)));
+            start_date.setDate(start_date.getDate() + 1);
+          };
+
+          // Step 2: Create an array of special dates
+          var selectedSpecialDate = specialDates.filter(function (sDate) {
+            var d = $.datepicker.formatDate('d-m-yy', new Date(sDate.day));
+            return selectedDates.indexOf(d) !== -1;
+          });
+
+          var total = (days - selectedSpecialDate.length) * <%= @space.price %>;
+          if (selectedSpecialDate.length > 0) {
+            $('#special_details').show();
+
+            selectedSpecialDate.map(function (date) {
+              total += date.price
+              $('#special_list').append('<li class="text-right">(' + date.day + '): $' + date.price + '</li>')
+            });
+          } else {
+            $('#special_details').hide();
+          }
+
+          //----------- END NEW UPDATE
+
+          $('#reservation_days').text(days);
+          $('#reservation_total').text(total);
+          $('#total_modal').text(total);
+
+        }
+      }
+    });
+  }
+
+  $.ajax({
+    url: '<%= preload_space_path(@space) %>',
+    dateTyp: 'json',
+    success: function (data) {
+
+      specialDates = data.special_dates;
+
+      $.each(data.reservations, function (arrID, arrValue) {
+        for (var d = new Date(arrValue.start_date); d <= new Date(arrValue.end_date); d.setDate(d.getDate() + 1)) {
+          unavailableDates.push($.datepicker.formatDate('d-m-yy', d));
+        }
+      });
+
+      $.each(data.unavailable_dates, function (arrID, arrValue) {
+        unavailableDates.push($.datepicker.formatDate('d-m-yy', new Date(arrValue.day)));
+      });
+
+    }
+  });
+</script>
+
+<script>
+  $(function () {
+    $('body').on('click', '.confirm-submit', function (e) {
+      $('#form').submit();
+    });
+  });
+</script>

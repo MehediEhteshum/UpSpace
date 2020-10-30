@@ -1,0 +1,101 @@
+<% spaces.each do |space| %>
+  <div class="column is-half has-text-left">
+    <div class="card space-listing" data-map="<%= space.id %>">
+      <% if space.featured? %>
+        <div class="featured"><span>Featured</span></div>
+      <% end %>
+      <% if space.tour_embed.present? %>
+        <div class="tour"><span>3D Tour</span></div>
+      <% end %>
+      <% if space.user_id == 231 %>
+        <div class="algonquin"><span>Algonquin</span></div>
+      <% end %>
+      <div class="card-image">
+        <figure class="image is-3by2">
+          <%= link_to space, target: "_blank" do %>
+            <%= image_tag space.cover_photo(:tile), alt: space.title.blank? ? "Venue" : space.title.truncate(150) %>
+          <% end %>
+        </figure>
+      </div>
+      <div class="card-content">
+        <div class="columns">
+          <div class="column is-12">
+            <div style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+              <p class="subtitle mb-0">
+                <% if space.active? %>
+                  <%= link_to space.title, space %>
+                <% else %>
+                  <%= link_to space.title, listing_space_path(space) %>
+                <% end %>
+              </p>
+            </div>
+            <div class="media">
+              <div class="column p-0">
+                <div class="media-left">
+                  <p>
+                    <%= space.listing_category %>
+                  </p>
+                  <p class="star-review">
+                    <span id="star_<%= space.id %>" class="star-review"></span>
+                  </p>
+                  <!-- <p>
+                    <%= space.parking %> Parking
+                  </p>
+                  <p>
+                    <%= space.capacity %>
+                  </p> -->
+                  <!-- <a class="button mt-2">Send Message</a> -->
+                </div>
+              </div>
+              <% if current_user && current_user.likes?(space) %>
+                <div class="column p-0">
+                  <div class="media-right has-text-right">
+                    <p class="favourite">
+                      <span id="favourite_<%= space.id %>">
+                        <i class="fas fa-heart fa-2x mr-5 mt-5" style="color: #ff2b56; margin-top: auto; margin-bottom: auto;"></i>
+                      </span>
+                    </p>
+                  </div>
+                </div>
+              <% end %>
+              <!-- <div class="column p-0">
+                <div class="media-right">
+                  <table class="table">
+                    <thead>
+                      <tr>
+                        <th>Hourly</th>
+                        <th>Daily</th>
+                        <th>Monthly</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>$<%= space.price %></td>
+                        <td>$<%= space.price %></td>
+                        <td>$<%= space.price %></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div> -->
+            </div>
+
+          </div>
+        </div>
+      </div>
+      <!-- <footer class="card-footer">
+        <a href="#" class="card-footer-item">View &amp; Book</a>
+        <a href="#" class="card-footer-item">Send Message</a>
+      </footer> -->
+    </div>
+  </div>
+
+
+  <script>
+    $('#star_<%= space.id %>').raty({
+      readOnly: true,
+      score: <%= space.average_rating %>
+    });
+  </script>
+
+<% end %>

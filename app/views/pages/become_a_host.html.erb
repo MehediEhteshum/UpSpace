@@ -1,0 +1,36 @@
+<div class="column has-text-centered">
+  <h2 class="title is-2 mt-5">Join the Space Sharing Community</h2>
+
+  <div class="column is-full-touch">
+    <div class="up-video-container">
+        <iframe style="height: 35vw; min-height: 460px" width="1024" src="https://www.youtube.com/embed/jW4cxurRMVg" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+    </div>
+  </div>
+
+  <p>Start making money by converting your space to cash. Become a Host on upSpace. Share your space.</p>
+  <p>Canada's #1 marketplace for meeting rooms and event venues</p>
+
+  <div class="column has-text-centered y-5">
+    <%= link_to "List a space", new_space_path, class: "button is-danger is-medium" %>
+  </div>
+
+  <p class="mb-5">No sign-up fees - No subscription - No commitments</p>
+  <p class="mb-5">All in an ad-free, easy to use platform</p>
+  <p class="mb-5">Sign up today and for a limited time get:</p>
+  <ul>
+    <li class="check">Unlimited number of Listings for each of your spaces</li>
+    <li class="check">Unlimited access to rental inquiries</li>
+    <li class="check">Premium listing features including video and 3D tours</li>
+    <li class="check">Email notifications</li>
+    <li class="check">Ability to chat with the Renter before the event</li>
+    <li class="check">Access to our dual user review system</li>
+    <li class="check">Secure payment functionality</li>
+    <li class="y-5">... and so much more!</li>
+  </ul>
+  <%= image_tag "/new-host-approval-process-upspace.png", alt:"New Host Approval Process | Upspace", class: "img-responsive homecard-img" %>
+</div>
+
+<div class="column has-text-centered">
+  <%= link_to "List a space", new_space_path, class: "button is-danger is-medium" %>
+  <p class="mt-5">Questions? <%= link_to "Contact Us", contact_path %> or check out the <%= link_to "FAQ", faq_path %></p>
+</div>

@@ -1,0 +1,100 @@
+<div class="steps mb-5">
+  <div class="step-item is-completed">
+    <div class="step-marker">
+      <span class="icon">
+        <i class="fa fa-check"></i>
+      </span>
+    </div>
+    <div class="step-details">
+      <p class="step-title">Payment</p>
+    </div>
+  </div>
+  <div class="step-item is-completed">
+    <div class="step-marker">
+      <span class="icon">
+        <i class="fa fa-check"></i>
+      </span>
+    </div>
+    <div class="step-details">
+      <p class="step-title">Details</p>
+    </div>
+  </div>
+  <div class="step-item is-active">
+    <div class="step-marker">3</div>
+    <div class="step-details">
+      <p class="step-title">Review</p>
+    </div>
+  </div>
+  <div class="step-item">
+    <div class="step-marker">
+      <span class="icon">
+        <i class="fa fa-flag"></i>
+      </span>
+    </div>
+    <div class="step-details">
+      <p class="step-title">Done</p>
+    </div>
+  </div>
+</div>
+
+<div class="columns">
+  <div class="column is-two-thirds">
+    <div class="columns is-multiline">
+      <div class="column is-fullwidth">
+        <div class="card">
+          <div class="card-content">
+            <div class="content">
+              <p class="title is-4">Review</p>
+            </div>
+            <div class="content">
+              <div class="columns is-multiline is-mobile">
+                <div class="column is-one-quarter">
+                  <p class="title is-6">Start</p>
+                </div>
+                <div class="column is-three-quarters">
+                  <p><%= @reservation.price_type == "hourly" ? local_time_with_timezone(@reservation.start_date, current_user.time_zone) : local_time_without_timezone(@reservation.start_date, current_user.time_zone) %></p>
+                </div>
+                <div class="column is-one-quarter">
+                  <p class="title is-6">End</p>
+                </div>
+                <div class="column is-three-quarters">
+                  <p><%= @reservation.price_type == "hourly" ? local_time_with_timezone(@reservation.end_date, current_user.time_zone) : local_time_without_timezone(@reservation.end_date, current_user.time_zone) %></p>
+                </div>
+                <div class="column is-one-quarter">
+                  <p class="title is-6">Notes</p>
+                </div>
+                <div class="column is-three-quarters">
+                  <p><%= @reservation.description %></p>
+                </div>
+                <div class="column is-one-quarter">
+                  <p class="title is-6">Payment</p>
+                </div>
+                <div class="column is-three-quarters pb-0">
+                  <p><%= @stripe_card.brand %> **** <%= @stripe_card.last4 %> Exp: <%= @stripe_card.exp_month.to_s + "/" + @stripe_card.exp_year.to_s %></p>
+                </div>
+                <%= form_for current_user, html: { class: "column is-three-quarters is-offset-one-quarter y-0 pt-0" } do |f| %>
+                  <label class="checkbox">
+                    <%= f.check_box :remember_card, class: "checkbox", checked: current_user.remember_card, onclick: "this.form.submit()" %>
+                    Remember this card
+                  </label>
+                <% end %>
+              </div>
+              <hr>
+              <div class="column is-fullwidth">
+                <p>
+                  Your credit card will be authorized for $<%= '%.2f' % @reservation.total %> if you continue.
+                  <br>
+                  This hold will be released after 7 days in the event your host does not respond to your request.
+                </p>
+              </div>
+              <div class="column is-fullwidth has-text-centered">
+                <%= link_to "Continue", reservation_complete_path, class: "button is-danger" %>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <%= render 'reservation_summary' %>
+</div>

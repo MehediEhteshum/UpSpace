@@ -1,0 +1,33 @@
+<% @notifications.take(@unread).each do |notification| %>
+    <div class="card">
+    <div class="card-content">
+      <div class="columns">
+        <div class="column is-1 has-text-right">
+          <i class="fas fa-circle icon-danger"></i>
+        </div>
+        <div class="column is-6">
+          <strong><%= link_to notification.content, conversation_messages_path(notification.path_id), class: "text-green" %></strong>
+        </div>
+        <div class="column is-4">
+          <span class="is-pulled-right"><%= link_to notification.created_at.in_time_zone(current_user.time_zone).to_formatted_s(:long), conversation_messages_path(notification.path_id), class: "text-black" %></span>
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>
+<% @notifications.drop(@unread).each do |notification| %>
+    <div class="card">
+    <div class="card-content">
+      <div class="columns">
+        <div class="column is-1">
+        </div>
+        <div class="column is-6">
+          <strong><%= link_to notification.content, conversation_messages_path(notification.path_id), class: "text-black" %></strong>
+        </div>
+        <div class="column is-4">
+          <span class="is-pulled-right"><%= link_to notification.created_at.in_time_zone(current_user.time_zone).to_formatted_s(:long), conversation_messages_path(notification.path_id), class: "text-black" %></span>
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>

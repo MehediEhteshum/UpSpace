@@ -1,0 +1,128 @@
+<!-- <h2 class="title is-2 has-text-centered mt-10">Earn Income by Becoming a Host</h2>
+<section class="up-service-carousel mt-10">
+    <div class="columns is-multiline has-text-centered">
+        <div
+            class="column is-two-thirds is-offset-2"
+        >
+            <div class="card is-shadowless">
+                !-- Script to make this work is in the hom.html.erb --
+                <div
+                    class="hero-carousel text-carousel"
+                    id="carousel-testimonial"
+                    style="overflow: hidden;"
+                >
+                    <div class="carousel-item">
+                        <p class="is-size-3">
+                            Secure Payment
+                        </p>
+                    </div>
+                    <div class="carousel-item">
+                        <p class="is-size-3">
+                            Flexible Booking
+                        </p>
+                    </div>
+                    <div class="carousel-item">
+                        <p class="is-size-3">
+                            Rent on Your Terms
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section> -->
+
+<style>
+
+    .up-video-container {
+        position: relative;
+        padding-bottom: 56.25%; /* 16:9 */
+        height: 0;
+    }
+    .up-video-container iframe {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+    }
+
+    /* .up-service-carousel,
+    .up-service-carousel .slider-container {
+        background-color: #009874;
+        color: white;
+    }
+
+    .up-service-carousel .columns {
+        margin-bottom: 0;
+    }
+
+    .up-service-carousel .slider-item {
+        min-height: 200px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .up-service-carousel .card {
+        background-color: transparent;
+    }
+
+    .up-service-carousel .slider-navigation-next {
+        right: 5px;
+    }
+
+    .up-service-carousel .slider-navigation-previous {
+        left: 5px;
+    } */
+</style>
+
+<h2 class="title is-2 has-text-centered mt-10">What people are saying about up<span class="text-green">Space</span></h2>
+
+<div class="container has-text-centered mt-10">
+    <section class="up-video-grid columns is-multiline is-mobile">
+        <div class="column is-full">
+            <div class="columns">
+                <div class="column is-full-touch is-half-desktop has-text-left">
+                    <div class="up-video-container">
+                        <iframe width="560" height="315" src="https://www.youtube.com/embed/Qy3pY5_vDt8" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    </div>
+                </div>
+                <div class="column is-half is-hidden-touch has-text-right">
+                    <h3 class="title is-3">"It’s a very efficient and cost effective way to market our space."</h3>
+                    <p class="is-size-5">Nicki Bridgland</p>
+                    <p class="is-size-6">Rideau Sports Centre</p>
+                </div>
+            </div>
+        </div>
+        <div class="column is-full mt-10">
+            <div class="columns">
+                <div class="column is-half is-hidden-touch has-text-left">
+                    <h3 class="title is-3">"I love and highly recommend upSpace."</h3>
+                    <p class="is-size-5">Antoine Joseph</p>
+                    <p class="is-size-6">The Complete Marketer</p>
+                </div>
+                <div  class="column is-full-touch is-half-desktop has-text-right">
+                    <div class="up-video-container">
+                        <iframe width="560" height="315" src="https://www.youtube.com/embed/rhtD1g4utTE" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="column is-full mt-10">
+            <div class="columns">
+                <div  class="column is-full-touch is-half-desktop has-text-left">
+                    <div class="up-video-container">
+                        <iframe width="560" height="315" src="https://www.youtube.com/embed/1sJ7JfPqhLo" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    </div>
+                </div>
+                <div class="column is-half is-hidden-touch has-text-right">
+                    <h3 class="title is-3">"The booking process was completely flawless."</h3>
+                    <p class="is-size-5">Reagan Bradley</p>
+                    <p class="is-size-6">Women Who Weed</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    <%= link_to "Become a Host", become_a_host_path, class: "button is-large is-primary mt-7" %>  
+</div>

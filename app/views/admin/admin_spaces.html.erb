@@ -1,0 +1,50 @@
+<div class="columns">
+
+  <div class="column is-2">
+    <%= render 'admin_menu' %>
+  </div>
+
+  <div class="column is-10">
+
+    <div class="has-text-centered"><h2 class="title is-2">Spaces</h2></div>
+
+    <table>
+      <tr>
+        <th style="padding-right: 10px;">ID</th>
+        <th style="padding-right: 10px;">Type</th>
+        <th style="padding-right: 10px;">Name</th>
+        <th style="padding-right: 10px;">Rate</th>
+        <th style="padding-right: 10px;">Lister</th>
+        <th class="has-text-centered" style="padding-right: 10px;">Published</th>
+        <th class="has-text-centered" style="padding-right: 10px;">Featured</th>
+      </tr>
+
+      <% @spaces.each do |space| %>
+      <tr>
+        <td style="padding-right: 10px;"><%= space.id %></td>
+        <td style="padding-right: 10px;"><%= space.listing_category %></td>
+        <td style="padding-right: 10px;"><%= link_to truncate(space.title, length: 50), space_path(space), class: "text-default" %></td>
+        <td style="padding-right: 10px">$<%= space.price %>/<%= space.listing_type == 'Hourly' ? 'hr' : 'day' %></td>
+        <td style="padding-right: 10px;"><%= link_to space.user_id, user_path(space.user_id) %></td>
+        <td class="has-text-centered" style="padding-right: 10px;">
+          <% if !space.active? %>
+            <i class="fas fa-times icon-red"></i>
+          <% else %>
+            <i class="fas fa-check icon-green"></i>
+          <% end %>
+        </td>
+        <td class="has-text-centered" style="padding-right: 10px;">
+          <% if !space.featured? %>
+            <i class="fas fa-times icon-red"></i>
+          <% else %>
+            <i class="fas fa-check icon-green"></i>
+          <% end %>
+        </td>
+      </tr>
+
+      <% end %>
+    </table>
+
+  </div>
+
+</div>

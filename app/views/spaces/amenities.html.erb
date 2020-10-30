@@ -1,0 +1,67 @@
+<div class="columns">
+  <div class="column is-one-quarter">
+    <%= render 'space_menu' %>
+  </div>
+  <div class="column is-three-quarters">
+    <div class="card is-shadowless">
+      <div class="card-header is-shadowless">
+        <div class="card-header-title">
+          <p class="title is-4">Amenities</p>
+        </div>
+      </div>
+      <div class="card-content">
+        <%= form_for @space do |f| %>
+          <div class="columns is-multiline">
+            <div class="column is-half">
+              <%= f.check_box :is_wifi %>
+              WiFi
+            </div>
+            <div class="column is-half">
+              <%= f.check_box :is_audio %>
+              Audio Equipment Available
+            </div>
+            <div class="column is-half">
+              <%= f.check_box :is_food %>
+              Food Available for Purchase
+            </div>
+            <div class="column is-half">
+              <%= f.check_box :is_video %>
+              Visual Equipment Available
+            </div>
+            <div class="column is-half">
+              <%= f.check_box :is_alcohol %>
+              Alcohol Available for Purchase
+            </div>
+            <div class="column is-half">
+              <%= f.check_box :is_accessible %>
+              Wheelchair Accessible
+            </div>
+            <div class="column is-half">
+              <%= f.check_box :is_byob %>
+              Alcohol Permitted on Premises
+            </div>
+            <div class="column is-half">
+              <%= f.check_box :is_ground %>
+              Ground Level
+            </div>
+            <div class="column is-half">
+              <%= f.check_box :is_catering %>
+              Catering Permitted
+            </div>
+            <div class="column is-half">
+              <%= f.check_box :is_natural %>
+              Natural Light
+            </div>
+            <div class="column is-half">
+              <%= f.check_box :is_kitchen %>
+              Kitchenette Available
+            </div>
+          </div>
+          <div class="has-text-centered">
+            <%= f.submit "Save", class: "button is-medium is-primary" %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,47 @@
+<script src="https://www.google.com/recaptcha/api.js" async defer></script>
+<div class="column is-half is-offset-one-quarter has-text-centered">
+  <p class="title is-3">What can we help you with?</p>
+  <%= simple_form_for @contact do |f| %>
+    <div class="field">
+      <div class="control has-icons-left">
+        <%= f.text_field :name, class: "input is-medium", required: true, label: false, placeholder: "Name" %>
+        <span class="icon is-small is-left">
+          <i class="fas fa-user"></i>
+        </span>
+      </div>
+    </div>
+    <div class="field">
+      <div class="control has-icons-left">
+        <%= f.email_field :email, class: "input is-medium", required: true, label: false, placeholder: "Email Address" %>
+        <span class="icon is-small is-left">
+          <i class="fas fa-envelope"></i>
+        </span>
+      </div>
+    </div>
+    <div class="field">
+      <div class="control has-icons-left">
+        <%= f.email_field :phone, class: "input is-medium", required: true, label: false, placeholder: "Phone Number" %>
+        <span class="icon is-small is-left">
+          <i class="fas fa-phone"></i>
+        </span>
+      </div>
+    </div>
+    <div class="field">
+      <div class="control">
+        <%= f.text_area :message, as: :text, rows: 5, class: "textarea is-medium", required: true, label: false, placeholder: "Message" %>
+      </div>
+    </div>
+    <div class="">
+      <%= f.hidden_field :nickname, hint: 'Leave this field blank!' %>
+    </div>
+    <div class="field y-3">
+      <div class="control">
+        <%= recaptcha_tags %>
+      </div>
+    </div>
+
+    <div class="is-full has-text-centered">
+      <%= f.button :submit, 'Send', :class=> "button is-danger is-large" %>
+    </div>
+  <% end %>
+</div>

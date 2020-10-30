@@ -1,0 +1,19 @@
+<div class="columns">
+  <div class="column is-one-quarter">
+    <%= render 'space_menu' %>
+  </div>
+  <div class="column is-three-quarters">
+    <div class="card is-shadowless">
+      <div class="card-content has-text-centered">
+        <% if !current_user.is_active_host %>
+          <p>You're almost done! You'll just need to connect an account so we know where to send your payments.</p>
+          <p class="mt-5">We take your security seriously. Your payment details are handled by <a href="https://stripe.com/ca" target="_blank">Stripe</a>. As an industry leader in online payments, <a href="https://stripe.com/ca" target="_blank">Stripe</a> securely processes billions of dollars annually.</p>
+          <p class="title is-3 mt-5"><%= link_to "Log in", stripe_express_login_path %> to Stripe<br>or create an account <%= link_to "here", stripe_express_path %></p>
+        <% else %>
+          Thank you for linking your Stripe account. You will be able to log in below to view your payout details.<br/><br/>
+          <%= link_to "Stripe Dashboard", @login_link, class: "button is-primary" %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

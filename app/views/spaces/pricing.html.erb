@@ -1,0 +1,54 @@
+<div class="columns">
+  <div class="column is-one-quarter">
+    <%= render 'space_menu' %>
+  </div>
+  <div class="column is-three-quarters">
+    <div class="card is-shadowless">
+      <div class="card-content">
+        <div class="has-text-centered mb-5">
+          <p>Select the type of pricing you would like to offer and the rate.</p>
+            <p>Pricing can be changed at any time. Please note prices are listed as "Starting at".</p>
+                 <p>Not sure what price to ask? Send us an email and we'll be happy to help. jenn@upspace.ca.</p>
+          </p>
+        <p>For monthly rentals, provide equivalent daily pricing and specify "Monthly rental only" in the Description field</p>
+
+        </div>
+        <%= form_for @space do |f| %>
+          <%= f.fields_for :prices do |price| %>
+            <div class="field is-grouped is-grouped-centered">
+              <div class="control">
+                <label class="radio">
+                  <%= price.check_box :active, id: "active_" + price.object.price_type_id %>
+                  <%= price.label :price, price.object.price_type_id.capitalize %>
+                </label>
+                <p class="control has-icons-left">
+
+                  <% if price.object.price_type_id == "hourly"%>
+                  	<%= price.number_field :price, id: "input_hourly", placeholder: "E.g. 100", class: "input", step: 0.01, min: 10.00, value: number_to_currency(price.object.price.to_f, delimiter: '', unit: ''), required: true, disabled: !price.object.active %>
+                  <% elsif price.object.price_type_id == "daily"%>
+                  	<%= price.number_field :price, id: "input_daily", placeholder: "E.g. 100", class: "input", step: 0.01, min: 25.00, value: number_to_currency(price.object.price.to_f, delimiter: '', unit: ''), required: true, disabled: !price.object.active %>
+                  <% end %>
+                  <span class="icon is-small is-left">
+                    <i class="fas fa-dollar-sign"></i>
+                  </span>
+                </p>
+              </div>
+            </div>
+          <% end %>
+          <div class="has-text-centered mt-5">
+            <%= f.submit "Save", class: "button is-medium is-primary" %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.getElementById('active_hourly').onchange = function() {
+    document.getElementById('input_hourly').disabled = !this.checked;
+  };
+  document.getElementById('active_daily').onchange = function() {
+    document.getElementById('input_daily').disabled = !this.checked;
+  };
+</script>

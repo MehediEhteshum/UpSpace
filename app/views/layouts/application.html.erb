@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>upSpace | Rent space by the hour or day </title>
+  <%= csrf_meta_tags %>
+  <%= action_cable_meta_tag %>
+
+  <meta name="description" content="Canada's Marketplace for Space. Find venues with hourly or daily rentals for your next event.">
+  <meta name="keywords" content="upspace, upspace.ca, ottawa, venue, ottawa venue, space rental, hourly rental, venue rental, event, event space, event venue, boardroom, workshop, retreat, meetup ">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+
+  <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+  <%= stylesheet_link_tag 'animate', media: 'all' %>
+  <%= stylesheet_link_tag "bulmaCalendar", media: 'all' %>
+
+  <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+  <%= javascript_include_tag "jquery.raty" %>
+  <%= javascript_include_tag "modal" %>
+  <%= javascript_include_tag "bulmaCalendar" %>
+  <%= javascript_include_tag 'markerclusterer' if current_page?(search_path) %>
+  <%= favicon_link_tag 'favicon.ico' %>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma-extensions@6.2.7/bulma-carousel/dist/css/bulma-carousel.min.css">
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/bulma-extensions@6.2.7/bulma-carousel/dist/js/bulma-carousel.min.js"></script>
+  <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma-extensions@6.2.7/bulma-calendar/dist/css/bulma-calendar.min.css"> -->
+  <!-- <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/bulma-extensions@6.2.7/bulma-calendar/dist/js/bulma-calendar.min.js"></script> -->
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/noty/3.1.4/noty.css">
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/noty/3.1.4/noty.min.js"></script>
+
+  <!-- <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet"> -->
+  <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/jquery-ui-timepicker-addon@1.6.3/dist/jquery-ui-timepicker-addon.min.js"></script>
+  <!-- <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script> -->
+  <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script> -->
+  <!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script> -->
+
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-113932559-2"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+    gtag('js', new Date());
+
+    gtag('config', 'UA-113932559-2');
+  </script>
+
+  <!-- Overwrite external requests to HTTPS (Facebook profile image) -->
+  <% if (Rails.env == 'production') %>
+  <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+  <% end %>
+
+</head>
+
+<body <% if content_for?(:body_attributes) %> <%= yield(:body_attributes) %> <% end %> class="has-navbar-fixed-top<% if has_hero_banner() %> has-hero-banner<% end %><% if current_page?(search_path) %> no-margin<% end %>">
+
+  <% if user_masquerade? %>
+  <article class="message is-danger">
+    <div class="message-body">
+      You're currently logged in as <%= current_user.fullname %>. <%= link_to "Logout", back_masquerade_path(current_user) %>
+    </div>
+  </article>
+  <% end %>
+
+  <%= render 'shared/navbar' %>
+  <%= render 'shared/notifications' %>
+
+  <%= render 'devise/sessions/new' %>
+  <%= render 'devise/registrations/new' %>
+
+  <% if current_user %>
+  <input type="hidden" id="user_id" value="<%= current_user.id %>">
+  <% end %>
+
+  <div class="<%= "container mt-5 main" if !current_page?(root_path) && !current_page?(about_path) %>">
+    <%= yield %>
+  </div>
+
+  <%= render 'shared/footer' %>
+
+</body>
+
+</html>

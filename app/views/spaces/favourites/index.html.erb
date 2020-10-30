@@ -1,0 +1,20 @@
+<div class="column is-full">
+  <div class="card is-shadowless">
+    <div class="card-header is-shadowless">
+      <div class="card-header-title">
+        <p class="title is-4">Your Favourite Spaces</p>
+      </div>
+    </div>
+    <div class="card-content">
+      <div class="columns is-multiline">
+        <% if current_user.favourites.any? %>
+          <%= render partial: 'spaces/spaces_list_thirds', locals: {spaces: @favourite_spaces} %>
+        <% else %>
+          <div class="column has-text-centered">
+            <p>You don't have any favourites yet. <%= link_to "Find", search_path %> a space you like and click the <i class="far fa-heart icon-danger"></i></p>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,114 @@
+<div class="modal-background"></div>
+<div class="modal-card">
+  <section class="modal-card-body">
+    <div class="columns is-mobile is-centered">
+      <div class="column is-three-quarters has-text-centered is-centered">
+        <p class="title is-2">Payment</p>
+        <p>Enter your credit card details below.</p>
+        <p>You will be able to review your request before it is submitted.</p>
+        <%= form_tag("/add_payment", method: "post", id: "payment-form") do %>
+          <div class="field form-row y-10">
+            <div class="control">
+              <div id="card-element">
+                <!-- A Stripe Element will be inserted here. -->
+              </div>
+            </div>
+            <!-- Used to display form errors. -->
+            <div id="card-errors" role="alert" class="text-red"></div>
+          </div>
+          <button type="submit" class="button is-danger modal-button" data-target="modalreview" data-toggle="modalpayment">Continue</button>
+        <% end %>
+      </div>
+    </div>
+  </section>
+</div>
+<button class="modal-close is-large" aria-label="close"></button>
+
+<script src="https://js.stripe.com/v3/"></script>
+
+<script>
+  // Create a Stripe client.
+  var stripe = Stripe('<%= @stripe_key %>');
+
+  // Create an instance of Elements.
+  var elements = stripe.elements();
+
+  // Custom styling can be passed to options when creating an Element.
+  // (Note that this demo uses a wider set of styles than the guide below.)
+  var style = {
+    base: {
+      color: '#32325d',
+      fontFamily: '"Nunito", "Helvetica Neue", Helvetica, sans-serif',
+      fontSmoothing: 'antialiased',
+      fontSize: '16px',
+      '::placeholder': {
+        color: '#aab7c4'
+      }
+    },
+    invalid: {
+      color: '#fa755a',
+      iconColor: '#fa755a'
+    }
+  };
+
+  // Create an instance of the card Element.
+  var card = elements.create('card', {
+    hidePostalCode: true,
+    style: style
+  });
+
+  // Add an instance of the card Element into the `card-element` <div>.
+  card.mount('#card-element');
+
+  // Handle real-time validation errors from the card Element.
+  card.addEventListener('change', function(event) {
+    var displayError = document.getElementById('card-errors');
+    if (event.error) {
+      displayError.textContent = event.error.message;
+    } else {
+      displayError.textContent = '';
+    }
+  });
+
+  // Handle form submission.
+  var form = document.getElementById('payment-form');
+  form.addEventListener('submit', function(event) {
+    event.preventDefault();
+
+    stripe.createToken(card).then(function(result) {
+      if (result.error) {
+        // Inform the user if there was an error.
+        var paymentModal = document.getElementById('modalpayment');
+        var reviewModal = document.getElementById('modalreview');
+        var errorElement = document.getElementById('card-errors');
+        errorElement.textContent = result.error.message;
+        setTimeout(function () {
+            paymentModal.classList.add('is-active','fadeIn');
+            paymentModal.classList.remove('fadeOut');
+            reviewModal.classList.add('fadeOut');
+            reviewModal.classList.remove('is-active','fadeIn');
+        } , 300);
+      } else {
+        // Send the token to your server.
+        stripeTokenHandler(result.token);
+      }
+    });
+  });
+
+  // Submit the form with the token ID.
+  function stripeTokenHandler(token) {
+    // Insert the token ID into the form so it gets submitted to the server
+    var form = document.getElementById('payment-form');
+    var hiddenInput = document.createElement('input');
+    hiddenInput.setAttribute('type', 'hidden');
+    hiddenInput.setAttribute('name', 'stripeToken');
+    hiddenInput.setAttribute('value', token.id);
+    form.appendChild(hiddenInput);
+
+    // Submit the form
+    form.submit();
+    // $('#modalreview').addClass('is-active');
+    // $('#modalpayment').removeClass('is-active');
+    // e.preventDefault();
+  }
+</script>

@@ -1,0 +1,37 @@
+<div class="modal fade" id="event_view">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 style="float: left;"><%= @space.title %> Reservation</h4>
+        <button class="close" data-dismiss="modal" style="float: right;">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-md-6">
+            <p>Space: <%= @space.title %></p>
+            <p>User:</p>
+          </div>
+        </div>
+        <h2>This is a test.</h2>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  $(function() {
+    var notAvailable = $('#calendar_status_not_available'),
+        available = $('#calendar_status_available');
+
+    notAvailable.click(function() {
+      $('.no-pricing').show();
+      $('.new-pricing').hide();
+    });
+
+    available.click(function() {
+      $('.no-pricing').hide();
+      $('.new-pricing').show();
+    });
+
+  })
+</script>

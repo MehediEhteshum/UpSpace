@@ -1,0 +1,63 @@
+<div class="columns">
+
+  <div class="column is-2">
+    <%= render 'admin_menu' %>
+  </div>
+
+  <div class="column is-10">
+    <div class="has-text-centered"><h2 class="title is-2">Users</h2></div>
+
+    <table>
+      <tr>
+        <th class="text-center" style="padding-right: 10px;">Login</th>
+        <th style="padding-right: 10px;">ID</th>
+        <th style="padding-right: 10px;">Type</th>
+        <th style="padding-right: 10px;">Name</th>
+        <th style="padding-right: 10px;">Email</th>
+        <th style="padding-right: 10px;">Signup Date</th>
+        <th class="text-center" style="padding-right: 10px;">Email Confirmed</th>
+        <th class="text-center" style="padding-right: 10px;">Payment Method</th>
+        <th class="text-center" style="padding-right: 10px;">Stripe Account</th>
+        <th class="text-center" style="padding-right: 10px;">Spaces</th>
+        <th class="text-center" style="padding-right: 10px;">Reservations</th>
+      </tr>
+
+      <% @users.each do |user| %>
+      <tr style="border-bottom: 1px solid #cecece;">
+        <td class="text-center" style="padding-right: 10px;"><%= link_to "", masquerade_path(user), class: "fas fa-user-secret icon-green" %></td>
+        <td style="padding-right: 10px;"><%= user.id %></td>
+        <td style="padding-right: 10px;"><%= user.user_type %></td>
+        <td style="padding-right: 10px;"><%= link_to user.fullname, user_path(user), class: "text-default" %></td>
+        <td style="padding-right: 10px;"><%= user.email %></td>
+        <td style="padding-right: 10px;"><%= user.created_at.strftime("%Y-%m-%d") %></td>
+        <td class="text-center" style="padding-right: 10px;">
+          <% if user.confirmed_at.nil? %>
+            <i class="fas fa-times icon-red"></i>
+          <% else %>
+            <i class="fas fa-check icon-green"></i>
+          <% end %>
+        </td>
+        <td class="text-center" style="padding-right: 10px;">
+          <% if user.stripe_id.nil? %>
+            <i class="fas fa-times icon-red"></i>
+          <% else %>
+            <i class="fas fa-check icon-green"></i>
+          <% end %>
+        </td>
+        <td class="text-center" style="padding-right: 10px;">
+          <% if user.merchant_id.nil? %>
+            <i class="fas fa-times icon-red"></i>
+          <% else %>
+            <i class="fas fa-check icon-green"></i>
+          <% end %>
+        </td>
+        <td class="has-text-centered" style="padding-right: 10px;"><%= link_to Space.where(user_id: user).count, search_path(q: {user_id_eq: user}), class: "text-default" %></td>
+        <td class="has-text-centered" style="padding-right: 10px;"><%= link_to Reservation.where(user_id: user).count, root_path, class: "text-default" %></td>
+      </tr>
+
+      <% end %>
+    </table>
+
+  </div>
+
+</div>

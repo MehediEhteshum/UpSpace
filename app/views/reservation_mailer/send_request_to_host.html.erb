@@ -1,0 +1,21 @@
+Hi <%= @recipient.fullname %>,
+<br><br>
+<%= @space.title %> has a booking request from <%= @guest.fullname %> that requires your response.
+<br/><br/>
+View the details and accept or decline the request <%= link_to "here", bookings_url %>.
+You can also <a href="https://upspace.ca/users/<%= @guest.id %>">message the Renter</a> if you need more information.
+<br><br>
+<% if !@description.blank? %>
+<%= @guest.fullname %> provided the following description of the booking:
+<br/><br/>
+<em><%= simple_format(@description) %></em>
+<br/><br/>
+<% end %>
+<img src="https://upspace.ca/email/logo-email.jpg" alt="upSpace" />
+<br>
+515 Legget Drive, Suite 800, Ottawa, ON K2K 3G4
+<br>
+Check us out on
+<a href="https://www.facebook.com/upspace.ca/" target="_blank">Facebook</a>,
+<a href="https://www.instagram.com/upspace.ca" target="_blank">Instagram</a>, and
+<a href="https://www.linkedin.com/company/upspace/" target="_blank">LinkedIn</a>

@@ -1,0 +1,76 @@
+<style>
+  .up-spaces-header {
+    align-items: center;
+  }
+</style>
+
+<div class="columns">
+  <div class="column">
+    <div class="card is-shadowless">
+      <div class="card-header is-shadowless up-spaces-header">
+        <div class="card-header-title">
+          <p class="title is-4">Spaces</p>
+        </div>
+        <%= link_to "Create a New Space", new_space_path, class: "button is-danger mr-6" %>
+      </div>
+      <div class="card-content">
+        <% if @spaces.count == 0 %>
+          <h4>You don't have any Spaces yet</h4><br/>
+          <%# if current_user.merchant_id.blank? %>
+            <%# <%= link_to image_tag('stripe_button.png'), stripe_express_path %>
+          <%# else %>
+          <%# end %>
+            <%# <%= link_to "List Your First Space", new_space_path, class: "button is-danger" %>
+        <% else %>
+          <% @spaces.each do |space| %>
+            <div class="columns">
+              <div class="column is-4">
+                <%= image_tag space.cover_photo(:tile), class: "image" %>
+              </div>
+              <div class="column is-5">
+                <h4>
+                  <%= space.title %>
+                  <br/><br/>
+                  Listing Type: <%= space.listing_type %>
+                  <br/><br/>
+                  <% if space.active? %>
+                    <span class="text-green">Active</span>
+                  <% else %>
+                    <span class="text-red">Not Active</span>
+                  <% end %>
+                </h4>
+                <div id="star_<%= space.id %>" class="star-review"></div><%= pluralize(space.guest_reviews.count, "review") %>
+                <script>
+                  $('#star_<%= space.id %>').raty({
+                    path: '/',
+                    readOnly: true,
+                    score: <%= space.average_rating %>
+                  });
+                </script>
+              </div>
+              <div class="column is-3">
+                <%= link_to "Edit", listing_space_path(space), class: "button is-primary is-fullwidth mt-1" %>
+                <% if space.active? %>
+                  <%= link_to "Preview", space, class: "button is-primary is-fullwidth mt-1" %>
+                  <%= form_for space do |f| %>
+                    <%= f.hidden_field :active, value: false %>
+                    <%= f.submit "Deactivate", id: "publish_button", class: "button is-warning is-fullwidth mt-1" %>
+                  <% end %>
+                <% else %>
+                  <% is_ready = current_user.is_active_host && !space.active && space.has_active_price && !space.title.blank? && !space.photos.blank? && !space.address.blank? %>
+                  <% if is_ready %>
+                    <%= form_for space do |f| %>
+                      <%= f.hidden_field :active, value: true %>
+                      <%= f.submit "Publish", id: "publish_button", class: "button is-primary is-fullwidth mt-1" %>
+                    <% end %>
+                  <% end %>
+                  <%# <%= link_to "Delete", space, method: :delete, data: {confirm: "Are you sure? This cannot be undone."}, class: "button is-danger is-fullwidth hidden mt-1" %>
+                <% end %>
+              </div>
+            </div>
+          <% end %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

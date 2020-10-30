@@ -1,0 +1,11 @@
+{
+  "name": "pgtest",
+  "private": true,
+  "dependencies": {
+    "bulma": "0.8.2",
+    "bulma-calendar": "^6.0.7",
+    "bulma-carousel": "^4.0.4",
+    "bulma-extensions": "^6.2.7",
+    "noty": "^3.2.0-beta"
+  }
+}

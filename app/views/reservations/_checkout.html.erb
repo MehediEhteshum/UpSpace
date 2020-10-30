@@ -1,0 +1,40 @@
+<div id="modalcheckout" class="modal animated faster">
+  <div class="modal-background"></div>
+  <div class="modal-card">
+    <section class="modal-card-body">
+      <div class="columns is-mobile is-centered">
+        <div class="column is-three-quarters has-text-centered is-centered">
+          <p class="title is-2">Reservation Details</p>
+          <p>Please review your request details below</p>
+          <div class="columns is-multiline">
+            <div class="column is-2 has-text-left">
+              <h3>Start</h3>
+            </div>
+            <div class="column is-10 has-text-right">
+              <h3>
+                <strong id="start_date_modal"></strong>
+              </h3>
+            </div>
+            <div class="column is-2 has-text-left">
+              <h3>End</h3>
+            </div>
+            <div class="column is-10 has-text-right">
+              <h3>
+                <strong id="end_date_modal"></strong>
+              </h3>
+            </div>
+            <div class="column is-2 has-text-left">
+              <h3>Total</h3>
+            </div>
+            <div class="column is-10 has-text-right">
+              <h3>$<strong id="total_modal"></strong</h3>
+            </div>
+          </div>
+          <button class="modal-button button is-light" aria-label="close">Back</button>
+          <%= link_to 'Continue', "#", "data-target"=>"modalpayment", "data-toggle"=>"modalcheckout", class:"modal-button button is-danger" %>
+        </div>
+      </div>
+    </section>
+  </div>
+  <button class="modal-close is-large" aria-label="close"></button>
+</div>

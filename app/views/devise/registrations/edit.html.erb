@@ -1,0 +1,169 @@
+<div class="columns mt-5">
+  <div class="column is-one-quarter">
+    <ul class="sidebar-list">
+      <li class="sidebar-item"><%= link_to "Edit Profile", edit_user_registration_path, class: "sidebar-link active" %></li>
+    </ul>
+    <%= link_to "View My Profile", user_path(current_user.id), class: "button is-light mt-5" %>
+  </div>
+
+  <div class="column is-three-quarters">
+    <div class="card is-shadowless">
+      <div class="card-header is-shadowless">
+        <div class="card-header-title">
+          <p class="title is-4">Your Profile</p>
+        </div>
+      </div>
+      <div class="card-content">
+
+        <%= render 'avatars/form'%>
+
+        <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { class: 'mt-5', method: :put }) do |f| %>
+          <%= render 'shared/devisemes' %>
+          <div class="field">
+            <label class="label">Name</label>
+            <div class="control has-icons-left">
+              <%= f.text_field :fullname, placeholder: "Full Name", class: "input" %>
+              <span class="icon is-small is-left">
+                <i class="fas fa-user"></i>
+              </span>
+            </div>
+          </div>
+          <div class="field">
+            <label class="label">Phone Number</label>
+            <div class="control has-icons-left">
+              <%= f.phone_field :phone_number, placeholder: "Full Name", class: "input" %>
+              <span class="icon is-small is-left">
+                <i class="fas fa-phone"></i>
+              </span>
+            </div>
+          </div>
+          <div class="field">
+            <label class="label">Email</label>
+            <div class="control has-icons-left">
+              <%= f.email_field :email, placeholder: "Email", class: "input" %>
+              <span class="icon is-small is-left">
+                <i class="fas fa-envelope"></i>
+              </span>
+            </div>
+          </div>
+          <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
+            <div>Currently waiting confirmation for: <%= resource.unconfirmed_email %></div>
+          <% end %>
+          <div class="field">
+            <label class="label">New Password</label>
+            <div class="control has-icons-left">
+              <%= f.password_field :password, autocomplete: "off", placeholder: "New Password (leave blank if you don't want to change it)", class: "input"%>
+              <span class="icon is-small is-left">
+                <i class="fas fa-key"></i>
+              </span>
+            </div>
+          </div>
+          <div class="field">
+            <label class="label">Confirm New Password</label>
+            <div class="control has-icons-left">
+              <%= f.password_field :password_confirmation, autocomplete: "off", placeholder: "Confirm Password", class: "input" %>
+              <span class="icon is-small is-left">
+                <i class="fas fa-check"></i>
+              </span>
+            </div>
+          </div>
+          <div class="has-text-centered">
+            <%= f.submit "Save", class: "button is-danger"%>
+          </div>
+        <% end %>
+      </div>
+    </div>
+
+    <div class="card is-shadowless mt-10">
+      <div class="card-header is-shadowless">
+        <div class="card-header-title">
+          <p class="title is-4">Referrals</p>
+        </div>
+      </div>
+      <div class="card-content">
+        <p>Share your referral link with others! <%= link_to root_url(ref: current_user.referral_code), root_url(ref: current_user.referral_code) %></p>
+      </div>
+    </div>
+
+    <% if current_user.try(:admin?) %>
+      <div class="card mt-10">
+        <div class="card-header">
+          <div class="card-header-title">
+            Your Phone Number
+          </div>
+        </div>
+        <div class="card-content has-text-centered">
+          <% if !current_user.phone_number.blank? %>
+            <p class="title is-4"><%= current_user.phone_number %></p>
+            <button class="button is-light" data-toggle="modal" data-target="#update-phone">Update</button>
+            <% if current_user.phone_verified == false %>
+              <button class="button is-danger" data-toggle="modal" data-target="#verify-phone">Verify</button>
+            <% end %>
+          <% else %>
+            <button class="button is-light" data-toggle="modal" data-target="#update-phone">Add Phone Number</button>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+
+  </div>
+</div>
+
+
+<!-- MODAL FOR PHONE NUMBER -->
+
+<div id="update-phone" class="modal fade" role="dialog">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+
+      <div class="modal-header">
+        <h4 class="modal-title">Phone Number</h4>
+        <button class="close" data-dismiss="modal">&times;</button>
+      </div>
+
+      <div class="modal-body">
+        <%= form_for current_user, url: update_phone_number_user_path(current_user) do |f| %>
+          <div class="field">
+            <div class="control has-icons-left">
+              <%= f.phone_field :phone_number, class: "input", placeholder: "Your Phone Number" %>
+                <span class="icon is-small is-left">
+                  <svg class="svg-inline--fa fa-phone fa-w-16" aria-hidden="true" data-prefix="fas" data-icon="phone" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg=""><path fill="currentColor" d="M493.4 24.6l-104-24c-11.3-2.6-22.9 3.3-27.5 13.9l-48 112c-4.2 9.8-1.4 21.3 6.9 28l60.6 49.6c-36 76.7-98.9 140.5-177.2 177.2l-49.6-60.6c-6.8-8.3-18.2-11.1-28-6.9l-112 48C3.9 366.5-2 378.1.6 389.4l24 104C27.1 504.2 36.7 512 48 512c256.1 0 464-207.5 464-464 0-11.2-7.7-20.9-18.6-23.4z"></path></svg><!-- <i class="fas fa-phone"></i> -->
+                </span>
+            </div>
+          </div>
+          <div class="text-center">
+            <%= f.submit "Save", class: "btn btn-normal" %>
+          </div>
+        <% end %>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+<!-- MODAL FOR VERIFICATION -->
+
+<div id="verify-phone" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+
+      <div class="modal-header">
+        <button class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Verification Code</h4>
+      </div>
+
+      <div class="modal-body">
+        <%= form_for current_user, url: verify_phone_number_user_path(current_user), method: :post do |f| %>
+          <div class="form-group">
+            <%= f.phone_field :pin, class: "form-control", placeholder: "Your PIN", value: "" %>
+          </div>
+          <div class="text-center">
+            <%= f.submit "Verify", class: "btn btn-normal" %>
+          </div>
+        <% end %>
+      </div>
+
+    </div>
+  </div>
+</div>

@@ -1,0 +1,34 @@
+<div class="modal-background"></div>
+<div class="modal-card">
+  <section class="modal-card-body">
+    <div class="columns is-mobile is-centered">
+      <div class="card is-shadowless">
+        <div class="card-content">
+          <div class="header has-text-centered">
+            <p class="title is-2">Review</p>
+            <p>You're almost done!</p>
+            <p>Just confirm and your request will be processed.</p>
+          </div>
+          <p class="has-text-weight-bold mt-5">Venue</p>
+            <div class="card-image">
+              <figure class="image is-16by9">
+                <%= image_tag @space.cover_photo(:tile) %>
+              </figure>
+            </div>
+          <div class="content mt-5">
+            <p><span class="has-text-weight-bold">Host:</span> <%= @space.user.fullname %></p>
+            <p><span class="has-text-weight-bold">Date Requested:</span> <span id="start_date_modal"></span> to <span id="end_date_modal"></span></p>
+            <p><span class="has-text-weight-bold">Total Charges:</span> $<span id="total_modal"></span></p>
+            <hr>
+            <p class="has-text-weight-bold mt-3">Your credit card will only be charged when your request is accepted.</p>
+          </div>
+        </div>
+        <div class="column is-full has-text-centered">
+          <%= link_to 'Back', '#', "data-target"=>"modalpayment", "data-toggle" => "modalreview", class: "modal-button button is-light" %>
+          <button type="submit" class="button is-danger confirm-submit" data-disable-with="<i class='fa fa-spinner fa-spin'></i>Confirm">Confirm</button>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+<button class="modal-close is-large" aria-label="close"></button>

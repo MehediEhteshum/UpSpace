@@ -1,0 +1,50 @@
+<div id="modaldeviselogin" class="modal animated faster">
+  <div class="modal-background"></div>
+  <div class="modal-card">
+    <section class="modal-card-body">
+      <div class="columns is-mobile is-centered">
+        <div class="column is-three-quarters has-text-centered is-centered">
+          <p class="title is-2">Log In</p>
+          <span>Need an account? <%= link_to "Sign Up", "#", "data-target"=>"modaldeviseregister", "data-toggle"=>"modaldeviselogin", class: "modal-button" %></span>
+          <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
+            <div class="field has-text-left">
+              <label class="label">Email</label>
+              <div class="control">
+                <%= f.email_field :email, autofocus: true, placeholder: "Email", class: "input" %>
+              </div>
+            </div>
+
+            <div class="field has-text-left">
+              <label class="label">Password</label>
+              <div class="control">
+                <%= f.password_field :password, autocomplete: "off", placeholder: "Password", class: "input" %>
+              </div>
+            </div>
+
+            <% if devise_mapping.rememberable? %>
+              <span class="is-pulled-left">
+                <%= f.check_box :remember_me %> Remember Me
+              </span>
+            <% end %>
+            <span class="is-pulled-right">
+              <%= link_to "Forgot Password", new_user_password_path %>
+            </span>
+
+            <div class="field">
+              <div class="control has-text-centered">
+                <%= f.submit "Log In", class: "button is-danger mt-3" %>
+              </div>
+            </div>
+
+          <% end %>
+
+          <p class="y-5">or</p>
+
+          <%= link_to "Log In with Facebook", user_facebook_omniauth_authorize_path, class: "button is-facebook" %>
+
+        </div>
+      </div>
+    </section>
+  </div>
+  <button class="modal-close is-large" aria-label="close"></button>
+</div>

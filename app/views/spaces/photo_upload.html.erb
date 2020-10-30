@@ -1,0 +1,77 @@
+<div class="columns">
+  <div class="column is-one-quarter">
+    <%= render 'space_menu' %>
+  </div>
+  <div class="column is-three-quarters">
+    <div class="card is-shadowless">
+      <div class="card-content has-text-centered">
+        <div class="column is-half is-offset-one-quarter">
+          <%= form_for @space, url: space_photos_path(@space), method: 'post', html: {multipart: true} do |f| %>
+            <span id="upload" class="button is-danger btn-file">
+              <i class="fas fa-cloud-upload-alt"></i>&nbsp; Select Photos
+              <%= file_field_tag "images[]", type: :file, multiple: true, onchange: 'showStatus(); this.form.submit();' %>
+            </span>
+            <div id="status" class="hidden">
+              <i class="fa fa-spinner fa-spin"></i>&nbsp; Uploading...
+            </div>
+          <% end %>
+        </div>
+      </div>
+
+      <% if @photos.count > 1 %>
+        <div class="mb-2 has-text-centered">
+          <p>Drag and drop to reorder your photos</p>
+        </div>
+      <% end %>
+
+      <div id="photos"><%= render 'photos/photos_list' %></div>
+
+      <% if @photos.count > 0 %>
+        <div class="mt-10 has-text-centered">
+          <% if @space.active? %>
+            <%= link_to 'Save', request.referrer, class: "button is-medium is-primary" %>
+          <% elsif !@space.has_active_price %>
+            <%= link_to 'Save', pricing_space_path(@space), class: "button is-medium is-primary" %>
+          <% elsif @space.title.blank? || @space.description.blank? %>
+            <%= link_to 'Save', description_space_path(@space), class: "button is-medium is-primary" %>
+          <% elsif @space.photos.blank? %>
+            <%= link_to 'Save', photo_upload_space_path(@space), class: "button is-medium is-primary" %>
+          <% elsif @space.address.blank? %>
+            <%= link_to 'Save', location_space_path(@space), class: "button is-medium is-primary" %>
+          <% else %>
+            <%= link_to 'Save', request.referrer, class: "button is-medium is-primary" %>
+          <% end %>
+        </div>
+      <% end %>
+
+    </div>
+  </div>
+</div>
+
+
+<script>
+
+  $(document).ready(function () {
+    $('.sortable').sortable({
+      helper: 'clone',
+      cursor: 'hand',
+      stop: function(){
+        var data = $('.sortable').sortable('serialize')
+        $.ajax('<%= sort_space_photos_path(@space) %>', {
+          method: 'put',
+          data: data
+        })
+      }
+    });
+  });
+
+</script>
+
+<script>
+
+  function showStatus() {
+    $("#status").removeClass("hidden");
+    $("#upload").addClass("hidden");
+  };
+
+</script>

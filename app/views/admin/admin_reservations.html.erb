@@ -1,0 +1,47 @@
+<div class="columns">
+
+  <div class="column is-2">
+    <%= render 'admin_menu' %>
+  </div>
+
+  <div class="column is-10">
+    <div class="has-text-centered"><h2 class="title is-2">Reservations</h2></div>
+
+    <table>
+      <tr>
+        <th style="padding-right: 10px;">ID</th>
+        <th style="padding-right: 10px;">Status</th>
+        <th style="padding-right: 10px;">Total</th>
+        <th style="padding-right: 10px;">Renter</th>
+        <th style="padding-right: 10px;">Lister</th>
+        <th style="padding-right: 10px;">Space</th>
+        <th style="padding-right: 10px;">Start</th>
+        <th style="padding-right: 10px;">End</th>
+      </tr>
+
+      <% @reservations.each do |reservation| %>
+
+      <tr>
+        <td style="padding-right: 10px;"><%= reservation.id %></td>
+        <td style="padding-right: 10px;"><%= reservation.status %></td>
+        <td
+          <% if reservation.status == "Approved" %>class="text-green"
+          <% elsif reservation.status == "Cancelled" %>class="text-red"
+          <% elsif reservation.status == "Waiting" %>class="has-text-black"
+          <% end %>
+           style="padding-right: 10px;">
+          $<%= reservation.total %>
+        </td>
+        <td style="padding-right: 10px;"><%= mail_to User.find(reservation.user_id).email, User.find(reservation.user_id).fullname %></td>
+        <td style="padding-right: 10px;"><%= mail_to User.find(Space.find(reservation.space_id).user_id).email, User.find(Space.find(reservation.space_id).user_id).fullname %></td>
+        <td style="padding-right: 10px;"><%= link_to reservation.space_id, space_path(reservation.space_id) %></td>
+        <td style="padding-right: 10px;"><%= reservation.start_date.in_time_zone(current_user.time_zone).strftime('%h %d, %G @ %H:%M') %></td>
+        <td style="padding-right: 10px;"><%= reservation.end_date.in_time_zone(current_user.time_zone).strftime('%h %d, %G @ %H:%M') %></td>
+      </tr>
+
+      <% end %>
+    </table>
+
+  </div>
+
+</div>
