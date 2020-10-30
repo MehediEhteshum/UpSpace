@@ -357,9 +357,12 @@
     });
     <% if has_price_type %>
       $("[data-tab='<%= price_type %>']").click();
+      // Hiding the clear (cross) button of the datetimepicker.
+      $('.datetimepicker-clear-button').hide();
+    <% else %>
+      // Hiding the clear (cross) button of the datetimepicker.
+      $('.datetimepicker-clear-button').hide();
     <% end %>
-    // Hiding the clear (cross) button of the datetimepicker.
-    $('.datetimepicker-clear-button').hide();
   });
 
   var start_time = 0;
